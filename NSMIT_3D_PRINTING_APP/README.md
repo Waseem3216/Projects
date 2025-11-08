@@ -1,6 +1,6 @@
 <!-- Hero / Header -->
 <p align="center">
-  <img src="docs/hero-nsmit-3d.png" alt="NSMIT 3D Printing Inventory App" width="900">
+  <img src="images/home_page.png" alt="NSMIT 3D Printing Inventory App — Home" width="900">
 </p>
 
 <h1 align="center">NSMIT 3D Printing Inventory App</h1>
@@ -59,41 +59,39 @@ The **NSMIT 3D Printing Inventory App** is a custom, mobile-friendly SaaS built 
 
 ## 🖼️ Screens <a id="screens"></a>
 
-> Replace the image paths with your screenshots (e.g., `docs/screen-home.png`).
-
 <table>
   <tr>
     <td align="center">
-      <img src="docs/screen-home.png" width="360" alt="Home Screen"><br/>
+      <img src="images/home_page.png" width="360" alt="Home Screen"><br/>
       <strong>Home</strong><br/>
       Jump to <em>Materials</em> or <em>Equipment</em> with large, accessible tiles.
     </td>
     <td align="center">
-      <img src="docs/screen-materials.png" width="360" alt="Materials List"><br/>
+      <img src="images/materials_page.png" width="360" alt="Materials List"><br/>
       <strong>Materials List</strong><br/>
-      Searchable grid of filaments by brand with real images.
+      Searchable grid of filaments with real images and manufacturers.
     </td>
   </tr>
   <tr>
     <td align="center">
-      <img src="docs/screen-colors.png" width="360" alt="Material Colors"><br/>
+      <img src="images/materials_quantity.png" width="360" alt="Material Colors & Quantities"><br/>
       <strong>Color Quantities</strong><br/>
-      Per-color stock with +/– controls and direct edit.
+      Per-color stock with +/– controls and direct edit; instant SharePoint sync.
     </td>
     <td align="center">
-      <img src="docs/screen-equipment.png" width="360" alt="Equipment List"><br/>
+      <img src="images/equipments_page.png" width="360" alt="Equipment List"><br/>
       <strong>Equipment</strong><br/>
       Parts/accessories with photos, models, and quick search.
     </td>
   </tr>
   <tr>
     <td align="center">
-      <img src="docs/screen-equip-edit.png" width="360" alt="Edit Equipment"><br/>
+      <img src="images/equipments_quantity.png" width="360" alt="Edit Equipment Quantity"><br/>
       <strong>Edit Stock</strong><br/>
       Precise updates + timestamp & last editor for auditability.
     </td>
     <td align="center">
-      <img src="docs/screen-success.png" width="360" alt="Success Confirmation"><br/>
+      <img src="images/success_page.png" width="360" alt="Success Confirmation"><br/>
       <strong>Success</strong><br/>
       Clear cloud-save confirmation and shortcut navigation.
     </td>
@@ -154,22 +152,13 @@ The **NSMIT 3D Printing Inventory App** is a custom, mobile-friendly SaaS built 
 ---
 
 ## 🚀 Deployment <a id="deployment"></a>
-> High-level steps for a GitHub README. Adapt as needed for your environment.
 
-1. **Provision SharePoint Lists**  
-   - Create the lists described above (Materials, MaterialColors, Equipment; optional ChangeLog).  
-2. **Create the Power App (Modern FX)**  
-   - Build **Materials** and **Equipment** galleries bound to SharePoint.  
-   - Add detail screens with **+/–** buttons and a numeric input field.  
-   - On save: Patch to SharePoint, write audit entry (optional), show success screen.  
-3. **Enable Microsoft 365 Auth**  
-   - Restrict access to your org; assign roles via SharePoint permissions or Power Apps security.  
-4. **Connect Azure Services** (optional)  
-   - For richer telemetry, backups, or automation (e.g., with Power Automate/Azure Logic Apps).  
-5. **Branding & Accessibility**  
-   - Apply your institutional branding; verify contrast, hit-targets, and keyboard navigation.  
-6. **Publish & Share**  
-   - Publish the app, share with appropriate security groups, and attach usage documentation.
+1. **Provision SharePoint Lists** (as defined above).  
+2. **Build the Power App (Modern FX)** with Materials/Equipment galleries and quantity edit screens.  
+3. **Configure Microsoft 365 Auth** and permissions.  
+4. (Optional) **Wire Azure Services / Power Automate** for telemetry and advanced automation.  
+5. **Brand & Test** for accessibility and mobile.  
+6. **Publish & Share** to the appropriate security groups.
 
 ---
 
@@ -177,14 +166,3 @@ The **NSMIT 3D Printing Inventory App** is a custom, mobile-friendly SaaS built 
 - **Created by:** *Waseem Sayyedahmad*  
 - **Timeline:** *01/17/2025 – 02/20/2025*  
 - **Institutional Branding:** University of Houston
-
----
-
-## 📌 Notes
-- Replace the image placeholders in `docs/` with your actual screenshots.  
-- If you want a **demo GIF**, export a short walkthrough and place it at `docs/demo.gif`, then add:
-
-```html
-<p align="center">
-  <img src="docs/demo.gif" width="900" alt="NSMIT 3D Inventory Demo">
-</p>
