@@ -1,12 +1,12 @@
 <!-- Hero / Header -->
 <p align="center">
-  <img src="images/home_page.png" alt="NSMIT 3D Printing Inventory App — Home" width="900">
+  <img src="images/home_page.png" alt="NSMIT 3D Printing Inventory App - Home" width="900">
 </p>
 
 <h1 align="center">NSMIT 3D Printing Inventory App</h1>
 
 <p align="center">
-  <em>Mobile-first inventory for makerspaces — fast, visual, auditable.</em>
+  <em>Mobile-first inventory for makerspaces - fast, visual, auditable.</em>
 </p>
 
 <p align="center">
@@ -30,7 +30,7 @@
 ---
 
 ## Overview
-The **NSMIT 3D Printing Inventory App** is a custom, mobile-friendly SaaS built with **Microsoft Power Apps (modern FX)**, backed by **SharePoint Lists** and integrated with **Microsoft 365** and **Azure**. It replaces error-prone manual entry with a **touch-optimized interface**, **instant cloud syncing**, and **auditable change history** — perfect for a university makerspace or technical department.
+The **NSMIT 3D Printing Inventory App** is a custom, mobile-friendly SaaS built with **Microsoft Power Apps (modern FX)**, backed by **SharePoint Lists** and integrated with **Microsoft 365** and **Azure**. It replaces error-prone manual entry with a **touch-optimized interface**, **instant cloud syncing**, and **auditable change history** - perfect for a university makerspace or technical department.
 
 > **Use case**: Track filaments (by brand and color) and equipment/parts (extruders, beds, etc.) with search, quick +/– updates, and a clean success flow.
 
