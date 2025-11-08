@@ -13,7 +13,6 @@
   <a href="#features"><img src="https://img.shields.io/badge/App-Mobile%20First-2ea44f?style=for-the-badge" /></a>
   <a href="#tech-stack"><img src="https://img.shields.io/badge/Stack-Power%20Apps%20%7C%20SharePoint%20%7C%20Azure-0d6efd?style=for-the-badge" /></a>
   <a href="#screens"><img src="https://img.shields.io/badge/UI-Modern%20FX-6f42c1?style=for-the-badge" /></a>
-  <a href="#audit"><img src="https://img.shields.io/badge/Security-Role%20Based-20c997?style=for-the-badge" /></a>
 </p>
 
 <!-- Quick Nav -->
