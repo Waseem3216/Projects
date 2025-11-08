@@ -41,7 +41,7 @@ The **NSMIT 3D Printing Inventory App** is a custom, mobile-friendly SaaS built 
   Real-time updates across devices; reduce manual errors and duplicate entry.
 
 - **Visual, Intuitive Interface**  
-  Real photos, tiles, clear labels — approachable for both technical and non-technical users.
+  Real photos, tiles, clear labels - approachable for both technical and non-technical users.
 
 - **Smart Search & Filters**  
   Find anything in seconds, even in large catalogs.
@@ -53,7 +53,7 @@ The **NSMIT 3D Printing Inventory App** is a custom, mobile-friendly SaaS built 
   Large touch targets, optimized flows, easy for staff on the floor.
 
 - **Easy Extension**  
-  Add materials/colors/equipment via SharePoint — no app redeploy needed.
+  Add materials/colors/equipment via SharePoint - no app redeploy needed.
 
 ---
 
@@ -101,10 +101,10 @@ The **NSMIT 3D Printing Inventory App** is a custom, mobile-friendly SaaS built 
 ---
 
 ## ⚙️ Tech Stack <a id="tech-stack"></a>
-- **Front-End:** Microsoft **Power Apps (modern FX)** — responsive, touch-friendly UI  
-- **Back-End:** **SharePoint Lists** (“Materials”, “Equipment”) — cloud datastore  
-- **Auth:** **Microsoft 365** — secure, **role-based** access  
-- **Cloud Sync:** **Azure Services** — reliable storage & realtime updates  
+- **Front-End:** Microsoft **Power Apps (modern FX)** - responsive, touch-friendly UI  
+- **Back-End:** **SharePoint Lists** (“Materials”, “Equipment”) - cloud datastore  
+- **Auth:** **Microsoft 365** - secure, **role-based** access  
+- **Cloud Sync:** **Azure Services** - reliable storage & realtime updates  
 - **Automation:** Quantity updates, success toasts, logs (timestamp + user)  
 - **Accessibility:** Desktop + mobile ready
 
@@ -123,8 +123,8 @@ The **NSMIT 3D Printing Inventory App** is a custom, mobile-friendly SaaS built 
 <summary><strong>Data Model</strong> (click to expand)</summary>
 
 **SharePoint: Materials**  
-- `Title` (text) — Material/brand  
-- `ImageUrl` (hyperlink) — Photo  
+- `Title` (text) - Material/brand  
+- `ImageUrl` (hyperlink) - Photo  
 - `Manufacturer` (text)  
 - `Colors` (lookup or related list)  
 
@@ -134,7 +134,7 @@ The **NSMIT 3D Printing Inventory App** is a custom, mobile-friendly SaaS built 
 - `Quantity` (number)  
 
 **SharePoint: Equipment**  
-- `Title` (text) — Part/accessory  
+- `Title` (text) - Part/accessory  
 - `ModelOrSize` (text)  
 - `ImageUrl` (hyperlink)  
 - `Quantity` (number)
