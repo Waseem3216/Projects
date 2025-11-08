@@ -1,62 +1,190 @@
-# NSMIT 3D Printing Inventory App Display
+<!-- Hero / Header -->
+<p align="center">
+  <img src="docs/hero-nsmit-3d.png" alt="NSMIT 3D Printing Inventory App" width="900">
+</p>
 
-## Introduction
-The **NSMIT 3D Printing Inventory App** is a custom, mobile-friendly SaaS solution for efficient inventory management in a university makerspace or technical department. Built with **Microsoft Power Apps (modern FX front-end)** and backed by **two SharePoint Lists**, the app replaces cumbersome manual entry with an automated, streamlined interface. Integrations with **Microsoft 365** and **Azure Services** provide secure access and real-time data updates.
+<h1 align="center">NSMIT 3D Printing Inventory App</h1>
 
----
+<p align="center">
+  <em>Mobile-first inventory for makerspaces — fast, visual, auditable.</em>
+</p>
 
-## App Walkthrough
+<p align="center">
+  <a href="#features"><img src="https://img.shields.io/badge/App-Mobile%20First-2ea44f?style=for-the-badge" /></a>
+  <a href="#tech-stack"><img src="https://img.shields.io/badge/Stack-Power%20Apps%20%7C%20SharePoint%20%7C%20Azure-0d6efd?style=for-the-badge" /></a>
+  <a href="#screens"><img src="https://img.shields.io/badge/UI-Modern%20FX-6f42c1?style=for-the-badge" /></a>
+  <a href="#audit"><img src="https://img.shields.io/badge/Security-Role%20Based-20c997?style=for-the-badge" /></a>
+</p>
 
-### App Home Screen
-The home screen serves as the main dashboard with two large navigation buttons: **Materials** and **Equipment**. The touch-optimized UI (UH branding) lets users quickly start inventory tasks by choosing the relevant category.
-
-### Materials Inventory List
-Selecting **Materials** shows a searchable grid of filament/material types, each with a real image and manufacturer name. A search bar enables fast filtering—ideal for large inventories—while visual tiles help staff and students quickly select items to update or audit.
-
-### Material Color Quantity Management
-Choosing a material opens a list of its **color variations**. Each color shows a quantity field with **plus/minus** controls and direct edit support, reducing errors and speeding updates. Changes **sync instantly to SharePoint**, keeping inventory current across devices.
-
-### Equipment Inventory List
-Selecting **Equipment** displays a similar grid for printer parts and accessories (e.g., extruders, print beds). Each item shows a photo and model/size label. The search bar supports quick filtering across large equipment sets.
-
-### Edit Equipment Quantity
-Clicking an equipment tile opens a detail view to adjust **current stock**. Users can increase/decrease via **plus/minus**, enter values directly, and see **last modified timestamp** plus the **user** who made the change—supporting accountability and an auditable history.
-
-### Success Confirmation
-After updates, a bold confirmation screen shows **“SUCCESS!”** with a green checkmark, clearly signaling that changes were saved to the cloud. Bottom navigation offers **Home**, **Log out**, and other shortcuts to streamline multi-update workflows.
-
-### App Exit and Branding
-Returning home provides a clear way to exit the app. **University of Houston** branding is prominent, and bottom navigation ensures users are never lost and can end sessions confidently.
-
----
-
-## Technical Overview
-- **Front-End:** Microsoft Power Apps (modern FX) for a responsive, mobile-friendly UI  
-- **Back-End:** Two **SharePoint Lists** (“Materials” & “Equipment”) for real-time, cloud-based inventory  
-- **Authentication:** Integrated with **Microsoft 365** for secure, role-based access  
-- **Cloud Sync:** **Azure Services** for reliable storage and always-up-to-date information  
-- **Automation:** Quantity updates, change logging (timestamps + user), and visual feedback  
-- **Accessibility:** Desktop and mobile friendly for anywhere inventory management
+<!-- Quick Nav -->
+<p align="center">
+  <a href="#overview">Overview</a> • 
+  <a href="#features">Features</a> • 
+  <a href="#screens">Screens</a> • 
+  <a href="#tech-stack">Tech Stack</a> • 
+  <a href="#how-it-works">How It Works</a> • 
+  <a href="#deployment">Deployment</a> • 
+  <a href="#credits">Credits</a>
+</p>
 
 ---
 
-## Key Features
-- **Automated Inventory Tracking:** Instant, organization-wide updates minimize manual errors  
-- **Visual, Intuitive Interface:** Real images and clear navigation support both technical and non-technical staff  
-- **Real-Time Search & Filtering:** Find any material/equipment in seconds—even in large catalogs  
-- **Auditable Change History:** Every update stored with date/time and user for transparency  
-- **Mobile-First:** Optimized for tablets and phones to manage inventory on the go  
-- **Easy Extension:** Add new materials, colors, or equipment via SharePoint without redeploying the app
+## Overview
+The **NSMIT 3D Printing Inventory App** is a custom, mobile-friendly SaaS built with **Microsoft Power Apps (modern FX)**, backed by **SharePoint Lists** and integrated with **Microsoft 365** and **Azure**. It replaces error-prone manual entry with a **touch-optimized interface**, **instant cloud syncing**, and **auditable change history** — perfect for a university makerspace or technical department.
+
+> **Use case**: Track filaments (by brand and color) and equipment/parts (extruders, beds, etc.) with search, quick +/– updates, and a clean success flow.
 
 ---
 
-## Software Used
-- Microsoft Power Apps  
-- Microsoft SharePoint  
-- Microsoft 365  
-- Azure Services
+## ✨ Features
+- **Automated Inventory Tracking**  
+  Real-time updates across devices; reduce manual errors and duplicate entry.
+
+- **Visual, Intuitive Interface**  
+  Real photos, tiles, clear labels — approachable for both technical and non-technical users.
+
+- **Smart Search & Filters**  
+  Find anything in seconds, even in large catalogs.
+
+- **Auditable Change History** <a id="audit"></a>  
+  Each change logs timestamp and username for accountability.
+
+- **Mobile-First Experience**  
+  Large touch targets, optimized flows, easy for staff on the floor.
+
+- **Easy Extension**  
+  Add materials/colors/equipment via SharePoint — no app redeploy needed.
 
 ---
 
-**Project Created by:** *Waseem Sayyedahmad*  
-**Timeline:** *01/17/2025 – 02/20/2025*
+## 🖼️ Screens <a id="screens"></a>
+
+> Replace the image paths with your screenshots (e.g., `docs/screen-home.png`).
+
+<table>
+  <tr>
+    <td align="center">
+      <img src="docs/screen-home.png" width="360" alt="Home Screen"><br/>
+      <strong>Home</strong><br/>
+      Jump to <em>Materials</em> or <em>Equipment</em> with large, accessible tiles.
+    </td>
+    <td align="center">
+      <img src="docs/screen-materials.png" width="360" alt="Materials List"><br/>
+      <strong>Materials List</strong><br/>
+      Searchable grid of filaments by brand with real images.
+    </td>
+  </tr>
+  <tr>
+    <td align="center">
+      <img src="docs/screen-colors.png" width="360" alt="Material Colors"><br/>
+      <strong>Color Quantities</strong><br/>
+      Per-color stock with +/– controls and direct edit.
+    </td>
+    <td align="center">
+      <img src="docs/screen-equipment.png" width="360" alt="Equipment List"><br/>
+      <strong>Equipment</strong><br/>
+      Parts/accessories with photos, models, and quick search.
+    </td>
+  </tr>
+  <tr>
+    <td align="center">
+      <img src="docs/screen-equip-edit.png" width="360" alt="Edit Equipment"><br/>
+      <strong>Edit Stock</strong><br/>
+      Precise updates + timestamp & last editor for auditability.
+    </td>
+    <td align="center">
+      <img src="docs/screen-success.png" width="360" alt="Success Confirmation"><br/>
+      <strong>Success</strong><br/>
+      Clear cloud-save confirmation and shortcut navigation.
+    </td>
+  </tr>
+</table>
+
+---
+
+## ⚙️ Tech Stack <a id="tech-stack"></a>
+- **Front-End:** Microsoft **Power Apps (modern FX)** — responsive, touch-friendly UI  
+- **Back-End:** **SharePoint Lists** (“Materials”, “Equipment”) — cloud datastore  
+- **Auth:** **Microsoft 365** — secure, **role-based** access  
+- **Cloud Sync:** **Azure Services** — reliable storage & realtime updates  
+- **Automation:** Quantity updates, success toasts, logs (timestamp + user)  
+- **Accessibility:** Desktop + mobile ready
+
+---
+
+## 🧭 How It Works <a id="how-it-works"></a>
+
+### Flow at a Glance
+1. **Home** → choose **Materials** or **Equipment**  
+2. **List View** → search/filter; select an item  
+3. **Detail** → adjust quantity via **+/–** or direct entry  
+4. **Save** → instant **SharePoint** sync + **Success** confirmation  
+5. **Audit** → each change logs **who**, **when**, and **what** changed
+
+<details>
+<summary><strong>Data Model</strong> (click to expand)</summary>
+
+**SharePoint: Materials**  
+- `Title` (text) — Material/brand  
+- `ImageUrl` (hyperlink) — Photo  
+- `Manufacturer` (text)  
+- `Colors` (lookup or related list)  
+
+**SharePoint: MaterialColors**  
+- `MaterialId` (lookup → Materials)  
+- `ColorName` (text)  
+- `Quantity` (number)  
+
+**SharePoint: Equipment**  
+- `Title` (text) — Part/accessory  
+- `ModelOrSize` (text)  
+- `ImageUrl` (hyperlink)  
+- `Quantity` (number)
+
+**SharePoint: ChangeLog** (optional advanced)  
+- `EntityType` (choice: Material, Color, Equipment)  
+- `EntityId` (text/guid)  
+- `Field` (text)  
+- `OldValue` / `NewValue` (text/number)  
+- `ChangedBy` (person)  
+- `ChangedAt` (datetime)
+
+</details>
+
+---
+
+## 🚀 Deployment <a id="deployment"></a>
+> High-level steps for a GitHub README. Adapt as needed for your environment.
+
+1. **Provision SharePoint Lists**  
+   - Create the lists described above (Materials, MaterialColors, Equipment; optional ChangeLog).  
+2. **Create the Power App (Modern FX)**  
+   - Build **Materials** and **Equipment** galleries bound to SharePoint.  
+   - Add detail screens with **+/–** buttons and a numeric input field.  
+   - On save: Patch to SharePoint, write audit entry (optional), show success screen.  
+3. **Enable Microsoft 365 Auth**  
+   - Restrict access to your org; assign roles via SharePoint permissions or Power Apps security.  
+4. **Connect Azure Services** (optional)  
+   - For richer telemetry, backups, or automation (e.g., with Power Automate/Azure Logic Apps).  
+5. **Branding & Accessibility**  
+   - Apply your institutional branding; verify contrast, hit-targets, and keyboard navigation.  
+6. **Publish & Share**  
+   - Publish the app, share with appropriate security groups, and attach usage documentation.
+
+---
+
+## 📅 Project Info
+- **Created by:** *Waseem Sayyedahmad*  
+- **Timeline:** *01/17/2025 – 02/20/2025*  
+- **Institutional Branding:** University of Houston
+
+---
+
+## 📌 Notes
+- Replace the image placeholders in `docs/` with your actual screenshots.  
+- If you want a **demo GIF**, export a short walkthrough and place it at `docs/demo.gif`, then add:
+
+```html
+<p align="center">
+  <img src="docs/demo.gif" width="900" alt="NSMIT 3D Inventory Demo">
+</p>
