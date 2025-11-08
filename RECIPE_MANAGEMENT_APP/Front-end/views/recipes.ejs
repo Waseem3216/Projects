@@ -1,0 +1,36 @@
+<%- include('partials/header') %>
+
+<section class="card">
+  <h2>Recipes</h2>
+  <table class="table">
+    <thead><tr><th>Recipe</th><th>Actions</th></tr></thead>
+    <tbody>
+      <% if (recipes.length === 0) { %>
+        <tr><td colspan="2" class="muted">No recipes yet.</td></tr>
+      <% } %>
+      <% recipes.forEach(r => { %>
+        <tr>
+          <td><div class="mono small muted">… <%= (r.instructions || "").slice(0,60) %></div></td>
+          <td>
+            <a href="/recipes/<%= r.id %>" class="inline"><button type="button">View / Manage</button></a>
+            <form action="/recipes/<%= r.id %>/delete" method="post" class="inline">
+              <button type="submit" class="danger">Delete</button>
+            </form>
+          </td>
+        </tr>
+      <% }) %>
+    </tbody>
+  </table>
+</section>
+
+<section class="card">
+  <h3>Add Recipe</h3>
+  <form action="/recipes/new" method="post" class="form-grid">
+    <label>Instructions
+      <textarea name="instructions" rows="3" placeholder="Write steps..." required></textarea>
+    </label>
+    <button type="submit">Add</button>
+  </form>
+</section>
+
+<%- include('partials/footer') %>
