@@ -38,7 +38,8 @@
 8. [Tech Stack](#tech-stack)  
 9. [Project Structure](#project-structure)  
 10. [Running the Project](#running-the-project)  
-11. [Acknowledgements](#acknowledgements)  
+11. [References &amp; Inspiration](#-references--inspiration)  
+12. [Acknowledgements](#acknowledgements)  
 
 ---
 
@@ -711,6 +712,48 @@ npm start
 
 - Serve `frontend/index.html` using a simple static server (VS Code Live Server, `http-server`, or by configuring Express to serve the `frontend` folder).  
 - Log in or sign up and start using **XYMZ.Suite**.
+
+---
+
+## 📎 References &amp; Inspiration
+
+> These were the main external resources used for learning patterns, APIs, and design ideas that influenced this project. The XYMZ.Suite codebase is heavily customized on top of these references.
+
+### Backend &amp; API Design
+
+- **Node.js + MySQL CRUD Tutorial (YouTube)** – *Node.js + MySQL CRUD - GET, POST, PUT and DELETE*  
+  https://www.youtube.com/watch?v=8UMd_RIfNU4
+
+- **Node.js + Express + MySQL REST API (YouTube)** – *Learn Node JS with MySQL APIs Development Beginners*  
+  https://www.youtube.com/watch?v=na9sbI4YQ3A
+
+- **Express + MySQL Sample Repo (GitHub)** – *Node.js Rest APIs with Express &amp; MySQL* by bezkoder  
+  https://github.com/bezkoder/nodejs-express-mysql
+
+### Frontend (fetch, JS, and layout)
+
+- **Fetch API Docs (MDN Web Docs)** – official reference for `fetch()` usage and patterns  
+  https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch
+
+- **Vanilla JS &amp; DOM Patterns (MDN Web Docs)** – event handling, DOM updates, and async logic  
+  https://developer.mozilla.org/en-US/docs/Web/JavaScript
+
+- **Dark Dashboard &amp; Admin UI Inspiration**  
+  - Tailwind CSS examples and component ideas – https://tailwindcss.com/components  
+  - Dark dashboard layouts and cards – https://dribbble.com/tags/dark_dashboard  
+
+### CSS Templates &amp; UI Ideas
+
+- General structure and spacing ideas from modern admin templates:  
+  - https://themes.getbootstrap.com/  
+  - https://www.creative-tim.com/bootstrap-themes/admin-dashboard  
+  - https://uideck.com/
+
+### ChatGPT Code Generation &amp; Refactors
+
+- **ChatGPT (OpenAI)** – assisted in brainstorming UI wording, tightening Express route structure, and drafting parts of this README.  
+  https://chat.openai.com/  
+
 
 ---
 
