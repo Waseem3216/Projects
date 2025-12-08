@@ -33,10 +33,11 @@
 4. [Screenshots & UI Tour](#screenshots--ui-tour)  
 5. [How the Workspace Works](#how-the-workspace-works)  
 6. [Database Schema](#database-schema)  
-7. [Tech Stack](#tech-stack)  
-8. [Project Structure](#project-structure)  
-9. [Running the Project](#running-the-project)  
-10. [Acknowledgements](#acknowledgements)  
+7. [Table Summary](#table-summary)  
+8. [Tech Stack](#tech-stack)  
+9. [Project Structure](#project-structure)  
+10. [Running the Project](#running-the-project)  
+11. [Acknowledgements](#acknowledgements)  
 
 ---
 
@@ -69,25 +70,26 @@ It combines:
 
 ## Key Features
 
-### Authentication & Security
+<details>
+  <summary><strong>Authentication & Security</strong></summary>
 
 - Email + password authentication  
 - Passwords stored as **bcrypt hashes**  
 - Security question + answer stored as hashes for password recovery  
 - Optional **6-digit organization token** on login to route users into the correct workspace  
 - **JWT-based** session tokens on the backend  
+</details>
 
----
-
-### Organizations & Workspaces
+<details>
+  <summary><strong>Organizations & Workspaces</strong></summary>
 
 - Create a new organization as an **admin**, or join an existing one via a 6-digit **join token**  
 - Each user can belong to **multiple organizations**  
-- Top-bar **organization switcher** makes it easy to move between workspaces  
+- Top-bar **organization switcher** to move between workspaces  
+</details>
 
----
-
-### Projects & Kanban Boards (XYMZ.Ops)
+<details>
+  <summary><strong>Projects & Kanban Boards (XYMZ.Ops)</strong></summary>
 
 Per organization you can create multiple projects, each with its own Kanban board:
 
@@ -102,10 +104,10 @@ For each task:
 - Assignment to a member  
 - Comments thread  
 - File attachments (uploaded to the backend)  
+</details>
 
----
-
-### Analytics (XYMZ.BI)
+<details>
+  <summary><strong>Analytics (XYMZ.BI)</strong></summary>
 
 - Project-level **dashboard**:
   - Stacked bar chart of task statuses:
@@ -117,10 +119,10 @@ For each task:
 - Task-level **drilldown**:
   - Bar chart of **days left** per task  
   - Quickly see which tasks are close to their deadline  
+</details>
 
----
-
-### Team Capacity (XYMZ.Fleet)
+<details>
+  <summary><strong>Team Capacity (XYMZ.Fleet)</strong></summary>
 
 - Roster of members in the current organization  
 - Summary cards with:
@@ -128,10 +130,10 @@ For each task:
   - Active projects  
   - Average tasks per person  
 - Narrative **Focus** panel that explains who may be overloaded and who has room for more work  
+</details>
 
----
-
-### Delivery Risk & Alerts (XYMZ.Radar)
+<details>
+  <summary><strong>Delivery Risk & Alerts (XYMZ.Radar)</strong></summary>
 
 Three panels give a one-glance health check:
 
@@ -139,7 +141,8 @@ Three panels give a one-glance health check:
 - **At-Risk Projects**  
 - **Upcoming Deadlines**  
 
-Uses due dates and task states to surface what needs immediate attention across the workspace.
+Uses due dates and task states to surface what needs immediate attention across the workspace.  
+</details>
 
 ---
 
@@ -174,49 +177,54 @@ Main entry: `backend/server.js`
 
 Core API groups (all prefixed with `/api`):
 
-- **Auth**
-  - `POST /api/auth/register` – create user (+ optional organization for admins)  
-  - `POST /api/auth/login` – authenticate & issue JWT  
-  - `GET /api/auth/security-question` – fetch stored security question by email  
-  - `POST /api/auth/reset-password` – security-question-based password reset  
-  - `POST /api/auth/reset-org-token` – reset the 6-digit organization token (admin)
+#### Auth
 
-- **Organizations & Membership**
-  - `GET /api/me` – current user + organizations  
-  - `GET /api/orgs` – list organizations the user belongs to  
-  - `POST /api/orgs` – create a new organization  
-  - `POST /api/orgs/join-token` – join an organization via 6-digit token  
+- `POST /api/auth/register` – create user (+ optional organization for admins)  
+- `POST /api/auth/login` – authenticate & issue JWT  
+- `GET /api/auth/security-question` – fetch stored security question by email  
+- `POST /api/auth/reset-password` – security-question-based password reset  
+- `POST /api/auth/reset-org-token` – reset the 6-digit organization token (admin)
 
-- **Projects & Board**
-  - `GET /api/orgs/:orgId/projects` – list projects in an org  
-  - `POST /api/orgs/:orgId/projects` – create a project  
-  - `DELETE /api/projects/:projectId` – delete a project (with cascade in DB)  
-  - `GET /api/projects/:projectId/board` – full Kanban board (columns + tasks + members)  
-  - `POST /api/projects/:projectId/columns` – add a new column  
-  - `POST /api/projects/:projectId/tasks` – create task  
-  - `PUT /api/tasks/:taskId` – update task fields  
-  - `PATCH /api/tasks/:taskId/move` – drag-and-drop movement across columns  
-  - `DELETE /api/tasks/:taskId` – delete task  
+#### Organizations & Membership
 
-- **Comments & Attachments**
-  - `GET /api/tasks/:taskId/comments` – list comments for a task  
-  - `POST /api/tasks/:taskId/comments` – add a comment  
-  - `POST /api/tasks/:taskId/attachments` – upload a file  
+- `GET /api/me` – current user + organizations  
+- `GET /api/orgs` – list organizations the user belongs to  
+- `POST /api/orgs` – create a new organization  
+- `POST /api/orgs/join-token` – join an organization via 6-digit token  
 
-- **Analytics / Insights**
-  - `GET /api/orgs/:orgId/bi-summary` – project-level BI summary  
-  - `GET /api/projects/:projectId/bi-tasks` – task list with days-left calculation  
-  - `GET /api/orgs/:orgId/activity` – recent activity feed  
-  - `GET /api/orgs/:orgId/fleet` – member roster & roles  
-  - `GET /api/orgs/:orgId/radar` – org-wide risk & delivery health snapshot  
+#### Projects & Board
 
-**Middleware Stack**
+- `GET /api/orgs/:orgId/projects` – list projects in an org  
+- `POST /api/orgs/:orgId/projects` – create a project  
+- `DELETE /api/projects/:projectId` – delete a project (with cascade in DB)  
+- `GET /api/projects/:projectId/board` – full Kanban board (columns + tasks + members)  
+- `POST /api/projects/:projectId/columns` – add a new column  
+- `POST /api/projects/:projectId/tasks` – create task  
+- `PUT /api/tasks/:taskId` – update task fields  
+- `PATCH /api/tasks/:taskId/move` – drag-and-drop movement across columns  
+- `DELETE /api/tasks/:taskId` – delete task  
+
+#### Comments & Attachments
+
+- `GET /api/tasks/:taskId/comments` – list comments for a task  
+- `POST /api/tasks/:taskId/comments` – add a comment  
+- `POST /api/tasks/:taskId/attachments` – upload a file  
+
+#### Analytics / Insights
+
+- `GET /api/orgs/:orgId/bi-summary` – project-level BI summary  
+- `GET /api/projects/:projectId/bi-tasks` – task list with days-left calculation  
+- `GET /api/orgs/:orgId/activity` – recent activity feed  
+
+*(Additional fleet/radar endpoints can be added or derived from BI + board data.)*
+
+#### Middleware Stack
 
 - CORS  
 - JSON body parsing (`express.json`)  
 - JWT auth middleware (protects application routes)  
 - Multer for file uploads to `backend/uploads/`  
-- Error handler for unexpected server errors  
+- Central error handler for unexpected server errors  
 
 ---
 
@@ -347,7 +355,7 @@ This page is the “home base” where users land after logging in.
 - Columns show the number of tasks in the header  
 - Each task card displays:
   - Title  
-  - Priority badge (for example: high, medium)  
+  - Priority  
   - Due date  
 
 **Interaction:**
@@ -360,7 +368,7 @@ This page is the “home base” where users land after logging in.
     - View full discussion history  
   - Delete Task button  
 
-All column and task changes are persisted in MySQL, and actions are tracked in the `activity_log` table.
+All column and task changes are persisted in MySQL, and actions can be mirrored in an `activity_log` table for an audit trail.
 
 ---
 
@@ -375,7 +383,7 @@ All column and task changes are persisted in MySQL, and actions are tracked in t
   - Review  
   - Complete  
 
-Tooltip summaries include:
+Tooltip summaries can include:
 
 - Completed task count  
 - Owners / assignees  
@@ -565,27 +573,53 @@ CREATE TABLE IF NOT EXISTS attachments (
 );
 ```
 
-| Table             | Purpose                                                                      |
-| ----------------- | ---------------------------------------------------------------------------- |
-| `users`           | Application users with password hashes and security-answer hashes            |
-| `organizations`   | Client workspaces; each has an owner and a 6-digit join token                |
-| `org_members`     | Many-to-many mapping between users and organizations, with roles             |
-| `projects`        | Projects within an organization                                              |
-| `project_columns` | Kanban list columns per project                                              |
-| `tasks`           | Individual tasks, linked to a project and column, with assignee and due date |
-| `comments`        | Discussion thread on each task                                               |
-| `activity_log`    | Timeline of events across an organization                                    |
-| `attachments`     | Metadata for files uploaded to a task                                        |
+---
 
+## Table Summary
 
-| Layer    | Technologies                                                                                   |
-| -------- | ---------------------------------------------------------------------------------------------- |
-| Frontend | HTML5, CSS3, Vanilla JavaScript                                                                |
-| Backend  | Node.js, Express.js, JSON Web Tokens (JWT), Multer (file uploads), bcryptjs (password hashing) |
-| Database | MySQL (AWS RDS), mysql2 (Node client)                                                          |
-| Infra    | Render (app hosting), AWS RDS (managed MySQL), Cloudflare (domain & DNS)                       |
+- **users** – application users with password & security-answer hashes  
+- **organizations** – client workspaces; each has an owner and a 6-digit join token  
+- **org_members** – many-to-many mapping between users and organizations, with roles  
+- **projects** – projects within an organization  
+- **project_columns** – Kanban list columns per project  
+- **tasks** – individual tasks, linked to a project and column, with assignee and due date  
+- **comments** – discussion thread on each task  
+- **activity_log** – timeline of events across an organization  
+- **attachments** – metadata for files uploaded to a task  
 
+---
 
+## Tech Stack
+
+### Frontend
+
+- **HTML5, CSS3**  
+- **Vanilla JavaScript** (no heavy frontend framework required)
+
+### Backend
+
+- **Node.js**  
+- **Express.js**  
+- **JSON Web Tokens (JWT)** – auth & sessions  
+- **Multer** – file uploads  
+- **bcryptjs** – password hashing  
+
+### Database
+
+- **MySQL** (AWS RDS)  
+- **mysql2** (Node client)  
+
+### Infrastructure
+
+- **Render** – app hosting (Node service + static files)  
+- **AWS RDS** – managed MySQL  
+- **Cloudflare** – domain & DNS  
+
+---
+
+## Project Structure
+
+```text
 XYMZ-Suite/
 ├── backend/
 │   ├── server.js          # Express app & API routes
@@ -601,3 +635,67 @@ XYMZ-Suite/
 │   ├── css/               # Stylesheets (dark theme, layout)
 │   └── img/               # Logo and other assets
 └── README.md
+```
+
+---
+
+## Running the Project
+
+This is a simplified overview of how the app is run locally or on a new environment.
+
+### 1. Clone the repository
+
+```bash
+git clone https://github.com/<your-username>/XYMZ-Suite.git
+cd XYMZ-Suite/backend
+```
+
+### 2. Install backend dependencies
+
+```bash
+npm install
+```
+
+### 3. Create the MySQL database
+
+- Create a new empty database (e.g., `taskdesk`) in MySQL.  
+- Run the SQL from the **Database Schema** section against that database.
+
+### 4. Configure backend environment
+
+Create a `.env` file in `backend/` with your own values:
+
+```env
+PORT=5500
+JWT_SECRET=super-secret-jwt-key
+
+DB_HOST=your-rds-endpoint.amazonaws.com
+DB_USER=your_db_user
+DB_PASSWORD=your_db_password
+DB_NAME=taskdesk
+DB_PORT=3306
+```
+
+> Make sure `.env` is **not** committed to Git.
+
+### 5. Start the backend
+
+```bash
+npm start
+```
+
+### 6. Open the frontend
+
+- Serve `frontend/index.html` using a simple static server:
+  - VS Code Live Server  
+  - `npx http-server ./frontend`  
+  - or configure Express to serve the `frontend` folder  
+- Open the served URL in a browser, log in or sign up, and start using **XYMZ.Suite**.
+
+---
+
+## Acknowledgements
+
+- Frontend layout and dark dashboard look inspired by modern SaaS admin templates and design patterns.  
+- Infrastructure design informed by common three-tier web app practices (**Render + AWS RDS + Cloudflare**).  
+- Built to illustrate a realistic full-stack workflow: auth, multi-tenant orgs, Kanban boards, analytics, and simple DevOps on a student-friendly stack.
