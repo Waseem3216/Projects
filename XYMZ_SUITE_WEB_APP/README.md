@@ -1,4 +1,3 @@
-
 <h1 align="center">XYMZ.Suite</h1>
 
 <p align="center">
@@ -104,7 +103,7 @@ For each task:
 - Due date  
 - Assignment to a member  
 - Comments thread  
-- File attachments (uploaded to the backend)  
+- File attachments (upload, download, delete via the backend)  
 
 ---
 
@@ -208,7 +207,10 @@ Core API groups (all prefixed with `/api`):
 - **Comments &amp; Attachments**
   - `GET /api/tasks/:taskId/comments` – list comments for a task  
   - `POST /api/tasks/:taskId/comments` – add a comment  
-  - `POST /api/tasks/:taskId/attachments` – upload a file  
+  - `GET /api/tasks/:taskId/attachments` – list attachments for a task  
+  - `POST /api/tasks/:taskId/attachments` – upload a file attachment  
+  - `DELETE /api/tasks/:taskId/attachments/:attachmentId` – delete an attachment  
+  - `GET /api/attachments/:attachmentId/download` – download a file attachment  
 
 - **Analytics / Insights**
   - `GET /api/orgs/:orgId/bi-summary` – project-level BI summary  
@@ -260,9 +262,8 @@ Core API groups (all prefixed with `/api`):
 ---
 
 ## 🖼️ Screenshots &amp; UI Tour
-
-> Add these images under `docs/screenshots/` and adjust paths if needed.  
-> The layout below uses a **2-column grid** for a more visual, portfolio-style presentation.
+ 
+> The layout below uses a **2-column grid** displaying a visual, portfolio-style presentation.
 
 <table>
   <tr>
@@ -285,8 +286,8 @@ Core API groups (all prefixed with `/api`):
     </td>
     <td align="center">
       <img src="docs/screenshots/04-task-detail.png" alt="XYMZ.Ops – Task detail" width="320"><br/>
-      <strong>Task Detail – Quick Edit &amp; Comments</strong><br/>
-      Side-panel editor with priority, due date, assignee, and task discussion thread.
+      <strong>Task Detail – Quick Edit, Comments &amp; Attachments</strong><br/>
+      Side-panel editor with priority, due date, assignee, task discussion thread, and a full attachments area (upload, download, remove files).
     </td>
   </tr>
   <tr>
@@ -381,7 +382,7 @@ This page is the “home base” where users land after logging in.
 
 ### 3. XYMZ.Ops – Project Kanban
 
-**Screenshots:** XYMZ.Ops – Kanban Board, Task Detail – Quick Edit &amp; Comments
+**Screenshots:** XYMZ.Ops – Kanban Board, Task Detail – Quick Edit, Comments &amp; Attachments
 
 **Top section:**
 
@@ -406,6 +407,10 @@ This page is the “home base” where users land after logging in.
   - Comments section:
     - Add new comments  
     - View full discussion history  
+  - Attachments section:
+    - Upload files via the built-in file uploader  
+    - See a list of existing attachments (name, size)  
+    - Download or delete attachments directly from the task  
   - Delete Task button  
 
 All column and task changes are persisted in MySQL, and actions are tracked in the `activity_log` table.
