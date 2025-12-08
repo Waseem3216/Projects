@@ -1,4 +1,3 @@
-
 <h1 align="center">XYMZ.Suite</h1>
 
 <p align="center">
@@ -26,12 +25,12 @@
 
 ---
 
-## 📚 Table of Contents
+## Table of Contents
 
 1. [Overview](#overview)  
 2. [Key Features](#key-features)  
 3. [System Architecture](#system-architecture)  
-4. [Screenshots &amp; UI Tour](#screenshots--ui-tour)  
+4. [Screenshots & UI Tour](#screenshots--ui-tour)  
 5. [How the Workspace Works](#how-the-workspace-works)  
 6. [Database Schema](#database-schema)  
 7. [Table Summary](#table-summary)  
@@ -42,19 +41,19 @@
 
 ---
 
-## 💡 Overview
+## Overview
 
 **XYMZ.Suite** is a full-stack web application that gives agencies, consultants, and small teams a shared workspace for client projects.
 
 It combines:
 
-- **XYMZ.Suite** – landing &amp; overview hub  
+- **XYMZ.Suite** – landing & overview hub  
 - **XYMZ.Ops** – Kanban boards and day-to-day delivery  
-- **XYMZ.BI** – simple project &amp; task analytics  
+- **XYMZ.BI** – simple project & task analytics  
 - **XYMZ.Fleet** – team capacity and workload overview  
 - **XYMZ.Radar** – risk, deadlines, and alerts  
 
-### 🚀 Deployment
+### Deployment
 
 - **Backend API + Static Frontend**  
   Deployed on **Render** as a Node.js service (Express). HTTPS is handled by Render with an automatically provisioned TLS certificate for the custom domain.
@@ -62,34 +61,35 @@ It combines:
 - **Database**  
   **MySQL** hosted on **AWS RDS**, inside a dedicated **VPC** with two subnets for high availability and network isolation.
 
-- **Domain &amp; DNS**  
+- **Domain & DNS**  
   Custom domain **`xymzsuite.com`** purchased and managed on **Cloudflare**, with:
   - `www.xymzsuite.com` → CNAME to Render service  
   - `xymzsuite.com` → CNAME / root mapping to Render service  
 
 ---
 
-## ✨ Key Features
+## Key Features
 
-### 🔐 Authentication &amp; Security
+<details>
+  <summary><strong>Authentication & Security</strong></summary>
 
 - Email + password authentication  
 - Passwords stored as **bcrypt hashes**  
 - Security question + answer stored as hashes for password recovery  
 - Optional **6-digit organization token** on login to route users into the correct workspace  
 - **JWT-based** session tokens on the backend  
+</details>
 
----
-
-### 🧭 Organizations &amp; Workspaces
+<details>
+  <summary><strong>Organizations & Workspaces</strong></summary>
 
 - Create a new organization as an **admin**, or join an existing one via a 6-digit **join token**  
 - Each user can belong to **multiple organizations**  
 - Top-bar **organization switcher** to move between workspaces  
+</details>
 
----
-
-### 📌 Projects &amp; Kanban Boards (XYMZ.Ops)
+<details>
+  <summary><strong>Projects & Kanban Boards (XYMZ.Ops)</strong></summary>
 
 Per organization you can create multiple projects, each with its own Kanban board:
 
@@ -98,16 +98,16 @@ Per organization you can create multiple projects, each with its own Kanban boar
 
 For each task:
 
-- Title &amp; description  
+- Title & description  
 - Priority (low / medium / high)  
 - Due date  
 - Assignment to a member  
 - Comments thread  
 - File attachments (uploaded to the backend)  
+</details>
 
----
-
-### 📊 Analytics (XYMZ.BI)
+<details>
+  <summary><strong>Analytics (XYMZ.BI)</strong></summary>
 
 - Project-level **dashboard**:
   - Stacked bar chart of task statuses:
@@ -119,10 +119,10 @@ For each task:
 - Task-level **drilldown**:
   - Bar chart of **days left** per task  
   - Quickly see which tasks are close to their deadline  
+</details>
 
----
-
-### 👥 Team Capacity (XYMZ.Fleet)
+<details>
+  <summary><strong>Team Capacity (XYMZ.Fleet)</strong></summary>
 
 - Roster of members in the current organization  
 - Summary cards with:
@@ -130,10 +130,10 @@ For each task:
   - Active projects  
   - Average tasks per person  
 - Narrative **Focus** panel that explains who may be overloaded and who has room for more work  
+</details>
 
----
-
-### 🚨 Delivery Risk &amp; Alerts (XYMZ.Radar)
+<details>
+  <summary><strong>Delivery Risk & Alerts (XYMZ.Radar)</strong></summary>
 
 Three panels give a one-glance health check:
 
@@ -141,13 +141,14 @@ Three panels give a one-glance health check:
 - **At-Risk Projects**  
 - **Upcoming Deadlines**  
 
-Uses due dates and task states to surface what needs immediate attention across the workspace.
+Uses due dates and task states to surface what needs immediate attention across the workspace.  
+</details>
 
 ---
 
-## 🏗️ System Architecture
+## System Architecture
 
-### 🎨 Frontend
+### Frontend
 
 - Static **HTML/CSS/JavaScript** frontend under `frontend/`  
 - Single-page style interface with views controlled by tabs:
@@ -170,63 +171,68 @@ Uses due dates and task states to surface what needs immediate attention across 
 
 ---
 
-### 🛠️ Backend (Node.js + Express)
+### Backend (Node.js + Express)
 
 Main entry: `backend/server.js`  
 
 Core API groups (all prefixed with `/api`):
 
-- **Auth**
-  - `POST /api/auth/register` – create user (+ optional organization for admins)  
-  - `POST /api/auth/login` – authenticate &amp; issue JWT  
-  - `GET /api/auth/security-question` – fetch stored security question by email  
-  - `POST /api/auth/reset-password` – security-question-based password reset  
-  - `POST /api/auth/reset-org-token` – reset the 6-digit organization token (admin)
+#### Auth
 
-- **Organizations &amp; Membership**
-  - `GET /api/me` – current user + organizations  
-  - `GET /api/orgs` – list organizations the user belongs to  
-  - `POST /api/orgs` – create a new organization  
-  - `POST /api/orgs/join-token` – join an organization via 6-digit token  
+- `POST /api/auth/register` – create user (+ optional organization for admins)  
+- `POST /api/auth/login` – authenticate & issue JWT  
+- `GET /api/auth/security-question` – fetch stored security question by email  
+- `POST /api/auth/reset-password` – security-question-based password reset  
+- `POST /api/auth/reset-org-token` – reset the 6-digit organization token (admin)
 
-- **Projects &amp; Board**
-  - `GET /api/orgs/:orgId/projects` – list projects in an org  
-  - `POST /api/orgs/:orgId/projects` – create a project  
-  - `DELETE /api/projects/:projectId` – delete a project (with cascade in DB)  
-  - `GET /api/projects/:projectId/board` – full Kanban board (columns + tasks + members)  
-  - `POST /api/projects/:projectId/columns` – add a new column  
-  - `POST /api/projects/:projectId/tasks` – create task  
-  - `PUT /api/tasks/:taskId` – update task fields  
-  - `PATCH /api/tasks/:taskId/move` – drag-and-drop movement across columns  
-  - `DELETE /api/tasks/:taskId` – delete task  
+#### Organizations & Membership
 
-- **Comments &amp; Attachments**
-  - `GET /api/tasks/:taskId/comments` – list comments for a task  
-  - `POST /api/tasks/:taskId/comments` – add a comment  
-  - `POST /api/tasks/:taskId/attachments` – upload a file  
+- `GET /api/me` – current user + organizations  
+- `GET /api/orgs` – list organizations the user belongs to  
+- `POST /api/orgs` – create a new organization  
+- `POST /api/orgs/join-token` – join an organization via 6-digit token  
 
-- **Analytics / Insights**
-  - `GET /api/orgs/:orgId/bi-summary` – project-level BI summary  
-  - `GET /api/projects/:projectId/bi-tasks` – task list with days-left calculation  
-  - `GET /api/orgs/:orgId/activity` – recent activity feed  
-  - `GET /api/orgs/:orgId/fleet` – member roster &amp; roles  
-  - `GET /api/orgs/:orgId/radar` – org-wide risk &amp; delivery health snapshot  
+#### Projects & Board
 
-**Middleware Stack**
+- `GET /api/orgs/:orgId/projects` – list projects in an org  
+- `POST /api/orgs/:orgId/projects` – create a project  
+- `DELETE /api/projects/:projectId` – delete a project (with cascade in DB)  
+- `GET /api/projects/:projectId/board` – full Kanban board (columns + tasks + members)  
+- `POST /api/projects/:projectId/columns` – add a new column  
+- `POST /api/projects/:projectId/tasks` – create task  
+- `PUT /api/tasks/:taskId` – update task fields  
+- `PATCH /api/tasks/:taskId/move` – drag-and-drop movement across columns  
+- `DELETE /api/tasks/:taskId` – delete task  
+
+#### Comments & Attachments
+
+- `GET /api/tasks/:taskId/comments` – list comments for a task  
+- `POST /api/tasks/:taskId/comments` – add a comment  
+- `POST /api/tasks/:taskId/attachments` – upload a file  
+
+#### Analytics / Insights
+
+- `GET /api/orgs/:orgId/bi-summary` – project-level BI summary  
+- `GET /api/projects/:projectId/bi-tasks` – task list with days-left calculation  
+- `GET /api/orgs/:orgId/activity` – recent activity feed  
+
+*(Additional fleet/radar endpoints can be added or derived from BI + board data.)*
+
+#### Middleware Stack
 
 - CORS  
 - JSON body parsing (`express.json`)  
 - JWT auth middleware (protects application routes)  
 - Multer for file uploads to `backend/uploads/`  
-- Error handler for unexpected server errors  
+- Central error handler for unexpected server errors  
 
 ---
 
-### 🗄️ Database
+### Database
 
 - Engine: **MySQL** (AWS RDS)  
 - Database name: `taskdesk` (configurable)  
-- Charset &amp; collation: **`utf8mb4` / `utf8mb4_unicode_ci`** for full Unicode support  
+- Charset & collation: **`utf8mb4` / `utf8mb4_unicode_ci`** for full Unicode support  
 
 **Connectivity**
 
@@ -235,7 +241,7 @@ Core API groups (all prefixed with `/api`):
 
 ---
 
-### ☁️ Hosting Topology
+### Hosting Topology
 
 - **Render**
   - Runs the Node.js backend  
@@ -254,69 +260,27 @@ Core API groups (all prefixed with `/api`):
 
 ---
 
-## 🖼️ Screenshots &amp; UI Tour
+## Screenshots & UI Tour
 
-> Add these images under `docs/screenshots/` and adjust paths if needed.  
-> The layout below uses a **2-column grid** for a more visual, portfolio-style presentation.
 
-<table>
-  <tr>
-    <td align="center" width="50%">
-      <img src="docs/screenshots/01-auth-login.png" alt="XYMZ Suite – Auth screen" width="320"><br/>
-      <strong>Auth – Login &amp; Sign Up</strong><br/>
-      Jump into XYMZ with a clean, focused auth screen and clear call-to-action tiles.
-    </td>
-    <td align="center" width="50%">
-      <img src="docs/screenshots/02-suite-home.png" alt="XYMZ Suite – Welcome" width="320"><br/>
-      <strong>XYMZ.Suite – Welcome / Landing</strong><br/>
-      Overview hub with projects, recent activity, and quick links into the rest of the suite.
-    </td>
-  </tr>
-  <tr>
-    <td align="center">
-      <img src="docs/screenshots/03-ops-board.png" alt="XYMZ.Ops – Kanban board" width="320"><br/>
-      <strong>XYMZ.Ops – Kanban Board</strong><br/>
-      Drag-and-drop board for daily delivery: backlog, in-progress, review, and done.
-    </td>
-    <td align="center">
-      <img src="docs/screenshots/04-task-detail.png" alt="XYMZ.Ops – Task detail" width="320"><br/>
-      <strong>Task Detail – Quick Edit &amp; Comments</strong><br/>
-      Side-panel editor with priority, due date, assignee, and task discussion thread.
-    </td>
-  </tr>
-  <tr>
-    <td align="center">
-      <img src="docs/screenshots/05-bi-dashboard.png" alt="XYMZ.BI – Project dashboard" width="320"><br/>
-      <strong>XYMZ.BI – Project Insights</strong><br/>
-      Stacked bar charts for each project, showing in-progress, review, and completed work.
-    </td>
-    <td align="center">
-      <img src="docs/screenshots/06-bi-drilldown.png" alt="XYMZ.BI – Task drilldown" width="320"><br/>
-      <strong>XYMZ.BI – Task Drilldown</strong><br/>
-      Days-left view of tasks to spotlight what's urgent and what's safely on track.
-    </td>
-  </tr>
-  <tr>
-    <td align="center">
-      <img src="docs/screenshots/07-fleet.png" alt="XYMZ.Fleet – Team view" width="320"><br/>
-      <strong>XYMZ.Fleet – Team &amp; Workload</strong><br/>
-      Team roster plus workload metrics so you can see who’s overloaded and who’s free.
-    </td>
-    <td align="center">
-      <img src="docs/screenshots/08-radar.png" alt="XYMZ.Radar – Alerts" width="320"><br/>
-      <strong>XYMZ.Radar – Risk &amp; Alerts</strong><br/>
-      At-a-glance overdue tasks, at-risk projects, and upcoming deadlines across the portfolio.
-    </td>
-  </tr>
-</table>
+| Area                                        | Screenshot                                                       |
+|---------------------------------------------|------------------------------------------------------------------|
+| Auth – Login & Sign Up                      | ![XYMZ Suite – Auth screen](docs/screenshots/01-auth-login.png) |
+| XYMZ.Suite – Welcome / Landing View         | ![XYMZ Suite – Welcome](docs/screenshots/02-suite-home.png)     |
+| XYMZ.Ops – Kanban Board                     | ![XYMZ.Ops – Board](docs/screenshots/03-ops-board.png)          |
+| Task Detail – Quick Edit & Comments         | ![XYMZ.Ops – Task detail](docs/screenshots/04-task-detail.png)  |
+| XYMZ.BI – Project Insights                  | ![XYMZ.BI – Project dashboard](docs/screenshots/05-bi-dashboard.png) |
+| XYMZ.BI – Task Drilldown                    | ![XYMZ.BI – Task drilldown](docs/screenshots/06-bi-drilldown.png)    |
+| XYMZ.Fleet – Team & Workload                | ![XYMZ.Fleet – Team view](docs/screenshots/07-fleet.png)        |
+| XYMZ.Radar – Risk & Alerts                  | ![XYMZ.Radar – Alerts](docs/screenshots/08-radar.png)           |
 
 ---
 
-## 🔁 How the Workspace Works
+## How the Workspace Works
 
 ### 1. Authentication Flow
 
-**Screenshot:** Auth – Login &amp; Sign Up
+**Screenshot:** Auth – Login & Sign Up
 
 New users can sign up with:
 
@@ -367,7 +331,7 @@ Regular users can later join an existing organization using this token.
 - Welcome text explaining how to use the suite  
 - **About XYMZ** panel  
 - **FAQs** panel ready for additional content  
-- **Contact** panel (email &amp; phone)  
+- **Contact** panel (email & phone)  
 - **Social** icons (Instagram, X, LinkedIn, Facebook)  
 
 This page is the “home base” where users land after logging in.
@@ -376,7 +340,7 @@ This page is the “home base” where users land after logging in.
 
 ### 3. XYMZ.Ops – Project Kanban
 
-**Screenshots:** XYMZ.Ops – Kanban Board, Task Detail – Quick Edit &amp; Comments
+**Screenshots:** XYMZ.Ops – Kanban Board, Task Detail – Quick Edit & Comments
 
 **Top section:**
 
@@ -403,11 +367,11 @@ This page is the “home base” where users land after logging in.
     - View full discussion history  
   - Delete Task button  
 
-All column and task changes are persisted in MySQL, and actions are tracked in the `activity_log` table.
+All column and task changes are persisted in MySQL, and actions can be mirrored in an `activity_log` table for an audit trail.
 
 ---
 
-### 4. XYMZ.BI – Project Insights &amp; Task Drilldown
+### 4. XYMZ.BI – Project Insights & Task Drilldown
 
 **Screenshots:** XYMZ.BI – Project Insights, XYMZ.BI – Task Drilldown
 
@@ -418,7 +382,7 @@ All column and task changes are persisted in MySQL, and actions are tracked in t
   - Review  
   - Complete  
 
-Tooltip summaries include:
+Tooltip summaries can include:
 
 - Completed task count  
 - Owners / assignees  
@@ -433,16 +397,16 @@ Data comes from `projects`, `tasks`, and `org_members` via aggregation queries.
 
 ---
 
-### 5. XYMZ.Fleet – Teams &amp; Coverage
+### 5. XYMZ.Fleet – Teams & Coverage
 
-**Screenshot:** XYMZ.Fleet – Team &amp; Workload
+**Screenshot:** XYMZ.Fleet – Team & Workload
 
 **Roster panel:**
 
 - Lists members in the selected organization  
 - Shows each member’s email and task counts  
 
-**Workload &amp; Roles:**
+**Workload & Roles:**
 
 - Total members  
 - Active projects  
@@ -456,9 +420,9 @@ This view makes it easy to see whether workload is balanced or if someone is ove
 
 ---
 
-### 6. XYMZ.Radar – Alerts &amp; Monitoring
+### 6. XYMZ.Radar – Alerts & Monitoring
 
-**Screenshot:** XYMZ.Radar – Risk &amp; Alerts
+**Screenshot:** XYMZ.Radar – Risk & Alerts
 
 - **Overdue Tasks**  
   - Tasks past their due date across all projects  
@@ -471,7 +435,7 @@ Each panel summarizes counts and dates, using task `due_date` and column-based s
 
 ---
 
-## 🧮 Database Schema
+## Database Schema
 
 The database is implemented in **MySQL** with the following schema:
 
@@ -610,9 +574,9 @@ CREATE TABLE IF NOT EXISTS attachments (
 
 ---
 
-## 🗂️ Table Summary
+## Table Summary
 
-- **users** – application users with password &amp; security-answer hashes  
+- **users** – application users with password & security-answer hashes  
 - **organizations** – client workspaces; each has an owner and a 6-digit join token  
 - **org_members** – many-to-many mapping between users and organizations, with roles  
 - **projects** – projects within an organization  
@@ -624,35 +588,35 @@ CREATE TABLE IF NOT EXISTS attachments (
 
 ---
 
-## 🧱 Tech Stack
+## Tech Stack
 
 ### Frontend
 
-- HTML5, CSS3  
-- Vanilla JavaScript  
+- **HTML5, CSS3**  
+- **Vanilla JavaScript** (no heavy frontend framework required)
 
 ### Backend
 
-- Node.js  
-- Express.js  
-- JSON Web Tokens (JWT)  
-- Multer (file uploads)  
-- bcryptjs (password hashing)  
+- **Node.js**  
+- **Express.js**  
+- **JSON Web Tokens (JWT)** – auth & sessions  
+- **Multer** – file uploads  
+- **bcryptjs** – password hashing  
 
 ### Database
 
-- MySQL (AWS RDS)  
-- mysql2 (Node client)  
+- **MySQL** (AWS RDS)  
+- **mysql2** (Node client)  
 
 ### Infrastructure
 
-- Render – app hosting  
-- AWS RDS – managed MySQL  
-- Cloudflare – domain &amp; DNS  
+- **Render** – app hosting (Node service + static files)  
+- **AWS RDS** – managed MySQL  
+- **Cloudflare** – domain & DNS  
 
 ---
 
-## 📁 Project Structure
+## Project Structure
 
 ```text
 XYMZ-Suite/
@@ -674,7 +638,7 @@ XYMZ-Suite/
 
 ---
 
-## 🏃‍♂️ Running the Project
+## Running the Project
 
 This is a simplified overview of how the app is run locally or on a new environment.
 
@@ -698,8 +662,20 @@ npm install
 
 ### 4. Configure backend environment
 
-- Create a `.env` file in `backend/` with your own values (JWT secret, DB host/user/password/name, port, etc.).  
-- Keep this file out of version control.
+Create a `.env` file in `backend/` with your own values:
+
+```env
+PORT=5500
+JWT_SECRET=super-secret-jwt-key
+
+DB_HOST=your-rds-endpoint.amazonaws.com
+DB_USER=your_db_user
+DB_PASSWORD=your_db_password
+DB_NAME=taskdesk
+DB_PORT=3306
+```
+
+> Make sure `.env` is **not** committed to Git.
 
 ### 5. Start the backend
 
@@ -709,12 +685,16 @@ npm start
 
 ### 6. Open the frontend
 
-- Serve `frontend/index.html` using a simple static server (VS Code Live Server, `http-server`, or by configuring Express to serve the `frontend` folder).  
-- Log in or sign up and start using **XYMZ.Suite**.
+- Serve `frontend/index.html` using a simple static server:
+  - VS Code Live Server  
+  - `npx http-server ./frontend`  
+  - or configure Express to serve the `frontend` folder  
+- Open the served URL in a browser, log in or sign up, and start using **XYMZ.Suite**.
 
 ---
 
-## 🙏 Acknowledgements
+## Acknowledgements
 
-- Frontend layout and dark-dashboard look inspired by modern SaaS admin templates and design patterns.  
-- Infrastructure design informed by common three-tier web app practices (Render + AWS RDS + Cloudflare).
+- Frontend layout and dark dashboard look inspired by modern SaaS admin templates and design patterns.  
+- Infrastructure design informed by common three-tier web app practices (**Render + AWS RDS + Cloudflare**).  
+- Built to illustrate a realistic full-stack workflow: auth, multi-tenant orgs, Kanban boards, analytics, and simple DevOps on a student-friendly stack.
