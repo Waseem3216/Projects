@@ -148,6 +148,10 @@ Uses due dates and task states to surface what needs immediate attention across 
 
 ## 🏗️ System Architecture
 
+<p align="center">
+  <img src="docs/screenshots/sys_arch_diagram.png" alt="System Technical Architecture Diagram" width="720">
+</p>
+
 ### 🎨 Frontend
 
 - Static **HTML/CSS/JavaScript** frontend under `frontend/`  
