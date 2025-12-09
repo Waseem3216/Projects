@@ -622,6 +622,10 @@ CREATE TABLE IF NOT EXISTS attachments (
 
 ## 🗂️ Table Summary
 
+<p align="center">
+  <img src="docs/screenshots/data-dictionary.png" alt="Data Dictionary (Tables & Attributes)" width="720">
+</p>
+
 - **users** – application users with password &amp; security-answer hashes  
 - **organizations** – client workspaces; each has an owner and a 6-digit join token  
 - **org_members** – many-to-many mapping between users and organizations, with roles  
