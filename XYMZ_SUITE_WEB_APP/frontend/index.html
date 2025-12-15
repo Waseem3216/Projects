@@ -4,6 +4,36 @@
     <meta charset="UTF-8" />
     <title>XYMZ Suite</title>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <!-- ================= FAVICON / TAB ICONS ================= -->
+    <!-- Main favicon (modern browsers) -->
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="32x32"
+      href="img/xymz-icon-32.png"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="16x16"
+      href="img/xymz-icon-16.png"
+    />
+
+    <!-- iOS / iPadOS home screen icon -->
+    <link
+      rel="apple-touch-icon"
+      sizes="180x180"
+      href="img/xymz-icon-180.png"
+    />
+
+    <!-- Classic .ico fallback (older browsers / Windows) -->
+    <link rel="shortcut icon" href="img/favicon.ico" />
+
+    <!-- Browser UI color (mobile address bar, etc.) -->
+    <meta name="theme-color" content="#020617" />
+
+    <!-- Main stylesheet -->
     <link rel="stylesheet" href="css/styles.css" />
   </head>
 
@@ -15,7 +45,7 @@
           <div class="logo-orb"></div>
           <div>
             <h1 id="brand-title">XYMZ</h1>
-            <p id="brand-subtitle">Sign in to access XYMZ.Suite!</p>
+            <p id="brand-subtitle">Sign in to access XYMZ.Suite.</p>
           </div>
         </div>
 
@@ -456,10 +486,6 @@
                       Email:
                       <a href="mailto:xymz86@gmail.com">xymz86@gmail.com</a>
                     </p>
-                    <p>
-                      Phone:
-                      <a href="tel:18322473572">(832) 247-3572</a>
-                    </p>
                   </section>
 
                   <!-- Social -->
@@ -621,6 +647,30 @@
                     Comment
                   </button>
                 </form>
+
+                <!-- Attachments -->
+                <h4 style="margin-top: 12px;">Attachments</h4>
+                <ul id="detail-attachments" class="attachments-list"></ul>
+
+                <form
+                  id="detail-attachment-form"
+                  class="attachment-form"
+                  enctype="multipart/form-data"
+                >
+                  <input
+                    type="file"
+                    id="detail-attachment-file"
+                    class="attachment-input"
+                  />
+                  <button type="submit" class="btn secondary small">
+                    Upload
+                  </button>
+                </form>
+                <span
+                  id="detail-attachment-status"
+                  class="status-text"
+                  style="margin-top: 4px;"
+                ></span>
 
                 <!-- Delete Task Button -->
                 <button

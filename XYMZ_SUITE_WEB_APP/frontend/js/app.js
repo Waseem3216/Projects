@@ -95,6 +95,12 @@ const detailCommentsList = document.getElementById('detail-comments');
 const detailCommentForm = document.getElementById('detail-comment-form');
 const detailCommentBody = document.getElementById('detail-comment-body');
 
+// Attachments
+const detailAttachmentsList = document.getElementById('detail-attachments');
+const detailAttachmentForm = document.getElementById('detail-attachment-form');
+const detailAttachmentFile = document.getElementById('detail-attachment-file');
+const detailAttachmentStatus = document.getElementById('detail-attachment-status');
+
 // Suite navigation tabs
 const suiteTabs = document.querySelectorAll('.suite-tab');
 const suiteView = document.getElementById('suite-view');
@@ -149,6 +155,10 @@ let selectedTaskId = null;
 let dragTaskId = null;
 let dragFromColumnId = null;
 
+// Touch-drag state (mobile)
+let touchTaskDragState = null;
+let touchProjectDragState = null;
+
 let currentView = 'suite';
 
 // projectCompletion[projectId] = true/false
@@ -158,6 +168,14 @@ let projectListDnDInitialized = false;
 /* ============================================================
    HELPERS
    ============================================================ */
+
+function isTouchLikeDevice() {
+  return (
+    'ontouchstart' in window ||
+    (navigator && typeof navigator.maxTouchPoints === 'number' && navigator.maxTouchPoints > 0) ||
+    (navigator && typeof navigator.msMaxTouchPoints === 'number' && navigator.msMaxTouchPoints > 0)
+  );
+}
 
 function setAuthStatus(msg) {
   authStatus.textContent = msg || '';
@@ -972,8 +990,7 @@ function renderProjectList() {
       await loadBoard(currentProjectId);
     });
 
-    // ✅ Add both a generic "dragging" class (used by logic)
-    //    and "dragging-project" (used by your CSS)
+    // Desktop drag & drop
     li.addEventListener('dragstart', () => {
       li.classList.add('dragging', 'dragging-project');
     });
@@ -1208,7 +1225,6 @@ async function loadBiTaskDrilldown(projectId, projectName) {
     if (!res.ok) throw new Error(data.error || 'Failed to load project tasks');
 
     const tasks = data.tasks || [];
-    const members = data.members || [];
 
     const labels = tasks.map((t) => t.title);
     const daysLeft = tasks.map((t) => {
@@ -1241,7 +1257,8 @@ async function loadBiTaskDrilldown(projectId, projectName) {
               afterBody(c) {
                 const t = tasks[c[0].dataIndex];
                 const member =
-                  members.find((m) => m.id === t.assigned_to) || null;
+                  boardState.members.find((m) => m.id === t.assigned_to) ||
+                  null;
                 return [
                   `Due: ${t.due_date ?? 'N/A'}`,
                   `Priority: ${t.priority}`,
@@ -1430,7 +1447,7 @@ async function loadRadarSnapshot() {
                 projectName: p.project_name,
                 projectId: p.project_id,
                 taskTitle: t.title,
-                taskId: t.id,
+                taskId: t.task_id || t.id,
                 daysLeft: t.days_left
               });
             }
@@ -1636,6 +1653,7 @@ function renderBoard() {
     body.classList.add('column-body');
     body.dataset.columnId = col.id;
 
+    // Desktop HTML5 DnD
     body.addEventListener('dragover', (e) => {
       e.preventDefault();
       e.stopPropagation();
@@ -1660,8 +1678,11 @@ function renderTaskCard(task) {
   card.dataset.taskId = task.id;
   card.dataset.columnId = task.column_id;
 
+  // Desktop drag
   card.addEventListener('dragstart', handleTaskDragStart);
   card.addEventListener('dragend', handleTaskDragEnd);
+
+  // Click to open details
   card.addEventListener('click', () => {
     selectedTaskId = task.id;
     renderTaskDetail(task.id);
@@ -1696,8 +1717,10 @@ function renderTaskCard(task) {
 }
 
 /* ============================================================
-   DRAG & DROP
+   DRAG & DROP (Desktop + Mobile)
    ============================================================ */
+
+/* ---------- Desktop HTML5 drag for tasks ---------- */
 
 function handleTaskDragStart(e) {
   e.stopPropagation();
@@ -1718,16 +1741,14 @@ function handleTaskDragEnd(e) {
   dragFromColumnId = null;
 }
 
-async function handleColumnDrop(e) {
-  e.preventDefault();
-  e.stopPropagation();
-  if (!dragTaskId) return;
+/* ---------- Shared "move task" helper used by desktop + touch ---------- */
 
-  const columnId = Number(e.currentTarget.dataset.columnId);
+async function moveTaskToColumn(taskId, columnId) {
+  if (!taskId || !columnId || !boardState.project) return;
 
   try {
     const res = await fetch(
-      `${API_BASE_URL}/api/tasks/${dragTaskId}/move`,
+      `${API_BASE_URL}/api/tasks/${taskId}/move`,
       {
         method: 'PATCH',
         headers: {
@@ -1748,6 +1769,173 @@ async function handleColumnDrop(e) {
     }
   } catch (err) {
     alert(err.message);
+  } finally {
+    dragTaskId = null;
+    dragFromColumnId = null;
+  }
+}
+
+async function handleColumnDrop(e) {
+  e.preventDefault();
+  e.stopPropagation();
+  if (!dragTaskId) return;
+
+  const columnId = Number(e.currentTarget.dataset.columnId);
+  await moveTaskToColumn(dragTaskId, columnId);
+}
+
+/* ---------- Mobile / touch drag (tasks + projects) ---------- */
+
+function initTouchDnD() {
+  if (!isTouchLikeDevice()) return;
+
+  initTouchTaskDnD();
+  initTouchProjectDnD();
+}
+
+/* Mobile drag for task cards (column-to-column) */
+function initTouchTaskDnD() {
+  if (!boardEl) return;
+
+  boardEl.addEventListener('touchstart', onTaskTouchStart, { passive: true });
+
+  function onTaskTouchStart(e) {
+    const card = e.target.closest('.task-card');
+    if (!card) return;
+
+    const touch = e.touches[0];
+    touchTaskDragState = {
+      card,
+      taskId: Number(card.dataset.taskId),
+      startColId: Number(card.dataset.columnId),
+      startX: touch.clientX,
+      startY: touch.clientY,
+      isDragging: false
+    };
+
+    window.addEventListener('touchmove', onTaskTouchMove, { passive: false });
+    window.addEventListener('touchend', onTaskTouchEnd, { passive: false });
+    window.addEventListener('touchcancel', onTaskTouchEnd, { passive: false });
+  }
+
+  function onTaskTouchMove(e) {
+    if (!touchTaskDragState) return;
+    const touch = e.touches[0];
+    const dx = touch.clientX - touchTaskDragState.startX;
+    const dy = touch.clientY - touchTaskDragState.startY;
+    const distanceSq = dx * dx + dy * dy;
+
+    // Start drag only after a small movement so taps still work
+    if (!touchTaskDragState.isDragging) {
+      if (distanceSq < 100) return; // ~10px threshold
+      touchTaskDragState.isDragging = true;
+      dragTaskId = touchTaskDragState.taskId;
+      dragFromColumnId = touchTaskDragState.startColId;
+      touchTaskDragState.card.classList.add('dragging');
+    }
+
+    // Once dragging, prevent scrolling
+    if (touchTaskDragState.isDragging) {
+      e.preventDefault();
+    }
+  }
+
+  async function onTaskTouchEnd(e) {
+    if (!touchTaskDragState) return;
+
+    const { card, taskId, startColId, isDragging } = touchTaskDragState;
+    touchTaskDragState = null;
+
+    window.removeEventListener('touchmove', onTaskTouchMove);
+    window.removeEventListener('touchend', onTaskTouchEnd);
+    window.removeEventListener('touchcancel', onTaskTouchEnd);
+
+    if (!isDragging) {
+      // It was just a tap; let the click handler open the detail panel.
+      return;
+    }
+
+    e.preventDefault();
+    card.classList.remove('dragging');
+
+    const touch = e.changedTouches[0];
+    const el = document.elementFromPoint(touch.clientX, touch.clientY);
+    const colBody = el && el.closest('.column-body');
+    const toColumnId = colBody ? Number(colBody.dataset.columnId) : startColId;
+
+    if (!toColumnId || toColumnId === startColId) {
+      dragTaskId = null;
+      dragFromColumnId = null;
+      return;
+    }
+
+    await moveTaskToColumn(taskId, toColumnId);
+  }
+}
+
+/* Mobile drag for project list (reordering) */
+function initTouchProjectDnD() {
+  if (!projectListEl) return;
+
+  projectListEl.addEventListener('touchstart', onProjectTouchStart, { passive: true });
+
+  function onProjectTouchStart(e) {
+    const li = e.target.closest('li[data-id]');
+    if (!li) return;
+
+    const touch = e.touches[0];
+    touchProjectDragState = {
+      li,
+      startX: touch.clientX,
+      startY: touch.clientY,
+      isDragging: false
+    };
+
+    window.addEventListener('touchmove', onProjectTouchMove, { passive: false });
+    window.addEventListener('touchend', onProjectTouchEnd, { passive: false });
+    window.addEventListener('touchcancel', onProjectTouchEnd, { passive: false });
+  }
+
+  function onProjectTouchMove(e) {
+    if (!touchProjectDragState) return;
+
+    const touch = e.touches[0];
+    const dx = touch.clientX - touchProjectDragState.startX;
+    const dy = touch.clientY - touchProjectDragState.startY;
+    const distanceSq = dx * dx + dy * dy;
+
+    if (!touchProjectDragState.isDragging) {
+      if (distanceSq < 100) return; // ~10px
+      touchProjectDragState.isDragging = true;
+      touchProjectDragState.li.classList.add('dragging', 'dragging-project');
+    }
+
+    if (touchProjectDragState.isDragging) {
+      e.preventDefault();
+      const afterElement = getProjectAfterElement(projectListEl, touch.clientY);
+      if (!afterElement) {
+        projectListEl.appendChild(touchProjectDragState.li);
+      } else {
+        projectListEl.insertBefore(touchProjectDragState.li, afterElement);
+      }
+    }
+  }
+
+  function onProjectTouchEnd(e) {
+    if (!touchProjectDragState) return;
+
+    const { li, isDragging } = touchProjectDragState;
+    touchProjectDragState = null;
+
+    window.removeEventListener('touchmove', onProjectTouchMove);
+    window.removeEventListener('touchend', onProjectTouchEnd);
+    window.removeEventListener('touchcancel', onProjectTouchEnd);
+
+    if (!isDragging) return;
+
+    e.preventDefault();
+    li.classList.remove('dragging', 'dragging-project');
+    saveProjectOrder(currentOrgId);
   }
 }
 
@@ -1860,6 +2048,9 @@ function renderTaskDetail(taskId) {
   detailStatus.textContent = '';
 
   loadComments(taskId);
+  if (detailAttachmentsList) {
+    loadAttachments(taskId);
+  }
 }
 
 btnCloseDetail.onclick = () => renderTaskDetail(null);
@@ -1988,6 +2179,116 @@ if (btnDeleteProject) {
 }
 
 /* ============================================================
+   ATTACHMENTS
+   ============================================================ */
+
+async function loadAttachments(taskId) {
+  if (!detailAttachmentsList) return;
+
+  detailAttachmentsList.innerHTML = '';
+
+  if (!taskId) return;
+
+  try {
+    const res = await fetch(
+      `${API_BASE_URL}/api/tasks/${taskId}/attachments`,
+      { headers: authHeaders() }
+    );
+
+    const data = await safeJson(res);
+    if (!res.ok) throw new Error(data.error || 'Failed to load attachments');
+
+    const attachments = data.attachments || [];
+
+    if (!attachments.length) {
+      const li = document.createElement('li');
+      li.textContent = 'No attachments yet.';
+      detailAttachmentsList.appendChild(li);
+      return;
+    }
+
+    attachments.forEach((a) => {
+      const li = document.createElement('li');
+      li.classList.add('attachment-item');
+
+      const urlPath =
+        a.url || (a.filename ? `/uploads/${a.filename}` : '#');
+
+      const link = document.createElement('a');
+      link.href = `${API_BASE_URL}${urlPath}`;
+      link.target = '_blank';
+      link.rel = 'noopener noreferrer';
+      link.textContent = a.original_name || a.filename || 'Download';
+
+      const metaSpan = document.createElement('span');
+      metaSpan.classList.add('attachment-meta');
+      const sizeKb = a.size ? `${Math.round(a.size / 1024)} KB` : '';
+      const ts = a.created_at
+        ? new Date(a.created_at).toLocaleString()
+        : '';
+      metaSpan.textContent = [
+        sizeKb && `(${sizeKb})`,
+        ts && ` • ${ts}`
+      ].filter(Boolean).join('');
+
+      const deleteBtn = document.createElement('button');
+      deleteBtn.type = 'button';
+      deleteBtn.textContent = 'Delete';
+      deleteBtn.classList.add('attachment-delete-btn');
+
+      deleteBtn.addEventListener('click', async () => {
+        if (!confirm('Delete this attachment?')) return;
+
+        try {
+          if (detailAttachmentStatus) {
+            detailAttachmentStatus.textContent = 'Deleting attachment...';
+          }
+
+          const delRes = await fetch(
+            `${API_BASE_URL}/api/attachments/${a.id}`,
+            {
+              method: 'DELETE',
+              headers: authHeaders()
+            }
+          );
+          const delData = await safeJson(delRes);
+          if (!delRes.ok) {
+            throw new Error(delData.error || 'Failed to delete attachment');
+          }
+
+          await loadAttachments(taskId);
+
+          if (detailAttachmentStatus) {
+            detailAttachmentStatus.textContent = 'Attachment deleted.';
+            setTimeout(() => {
+              if (detailAttachmentStatus) {
+                detailAttachmentStatus.textContent = '';
+              }
+            }, 2000);
+          }
+        } catch (err) {
+          if (detailAttachmentStatus) {
+            detailAttachmentStatus.textContent = `Error: ${err.message}`;
+          } else {
+            alert(err.message);
+          }
+        }
+      });
+
+      li.appendChild(link);
+      if (metaSpan.textContent) li.appendChild(metaSpan);
+      li.appendChild(deleteBtn);
+
+      detailAttachmentsList.appendChild(li);
+    });
+  } catch (err) {
+    const li = document.createElement('li');
+    li.textContent = `Error: ${err.message}`;
+    detailAttachmentsList.appendChild(li);
+  }
+}
+
+/* ============================================================
    COMMENTS
    ============================================================ */
 
@@ -2056,6 +2357,66 @@ detailCommentForm.onsubmit = async (e) => {
 };
 
 /* ============================================================
+   ATTACHMENT UPLOAD
+   ============================================================ */
+
+if (detailAttachmentForm && detailAttachmentFile) {
+  detailAttachmentForm.onsubmit = async (e) => {
+    e.preventDefault();
+    if (!selectedTaskId) return;
+
+    const file = detailAttachmentFile.files[0];
+    if (!file) {
+      if (detailAttachmentStatus) {
+        detailAttachmentStatus.textContent = 'Please choose a file first.';
+      }
+      return;
+    }
+
+    try {
+      if (detailAttachmentStatus) {
+        detailAttachmentStatus.textContent = 'Uploading attachment...';
+      }
+
+      const formData = new FormData();
+      formData.append('file', file);
+
+      const res = await fetch(
+        `${API_BASE_URL}/api/tasks/${selectedTaskId}/attachments`,
+        {
+          method: 'POST',
+          headers: authHeaders(), // don't set Content-Type manually
+          body: formData
+        }
+      );
+
+      const data = await safeJson(res);
+      if (!res.ok) throw new Error(data.error || 'Failed to upload attachment');
+
+      // Clear input
+      detailAttachmentFile.value = '';
+
+      await loadAttachments(selectedTaskId);
+
+      if (detailAttachmentStatus) {
+        detailAttachmentStatus.textContent = 'Attachment uploaded.';
+        setTimeout(() => {
+          if (detailAttachmentStatus) {
+            detailAttachmentStatus.textContent = '';
+          }
+        }, 2000);
+      }
+    } catch (err) {
+      if (detailAttachmentStatus) {
+        detailAttachmentStatus.textContent = `Error: ${err.message}`;
+      } else {
+        alert(err.message);
+      }
+    }
+  };
+}
+
+/* ============================================================
    GLOBAL DRAG/DROP SAFETY
    (Prevents browser navigation / page reload on drop)
    ============================================================ */
@@ -2081,4 +2442,5 @@ detailCommentForm.onsubmit = async (e) => {
    ============================================================ */
 
 setBrandLoggedOut();
+initTouchDnD();   // enable mobile drag for tasks + projects
 loadSession();
