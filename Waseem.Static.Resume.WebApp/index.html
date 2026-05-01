@@ -1,0 +1,594 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Waseem Sayyedahmad | Resume Desktop</title>
+  <meta name="description" content="Waseem Sayyedahmad resume website with experience, education, projects, skills, organizations, honors, and contact information." />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+
+<body>
+  <div id="bootScreen" class="bootScreen" role="status" aria-live="polite">
+    <div class="bootWindow window">
+      <header class="titlebar"><div class="titlebar__left"><span class="sysicon" aria-hidden="true"></span> WASEEM OS</div></header>
+      <div class="bootBody">
+        <div class="bootLine">Loading resume modules...</div>
+        <div class="bootLine">Indexing experience, projects, skills, and coursework...</div>
+        <div class="bootProgress" aria-hidden="true"><span></span></div>
+        <button id="skipBootBtn" class="systemButton" type="button">Skip Boot</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="desktop" class="desktop">
+
+    <button id="pmDesktopIcon" class="desktopIcon" type="button" aria-label="Program Manager. Double click to open" hidden>
+      <div class="icon icon--pmfolder" aria-hidden="true"></div>
+      <div class="desktopIconLabel">Program Manager</div>
+    </button>
+
+    <section class="window shell" id="shell" aria-label="Program Manager">
+      <header class="titlebar" data-drag-handle>
+        <div class="titlebar__left">
+          <span class="sysicon" aria-hidden="true"></span>
+          <span class="titlebar__title">Program Manager - Waseem Sayyedahmad</span>
+        </div>
+
+        <div class="titlebar__controls">
+          <button class="winBtn shellCtrl" type="button" id="pmMinBtn" aria-label="Minimize Program Manager">-</button>
+          <button class="winBtn shellCtrl" type="button" id="pmCloseBtn" aria-label="Close Program Manager">x</button>
+        </div>
+      </header>
+
+      <nav class="menubar" aria-label="Main menu">
+        <div class="menu-item">
+          <button class="menuBtn" type="button" data-menu="list">List</button>
+          <div class="dropdown" id="menu-list">
+            <button data-action="open" data-target="about">My Info</button>
+            <button data-action="open" data-target="experience">Experience</button>
+            <button data-action="open" data-target="education">Education</button>
+            <button data-action="open" data-target="projects">Projects</button>
+            <button data-action="open" data-target="organizations">Organizations</button>
+            <button data-action="open" data-target="honors">Honors</button>
+            <button data-action="open" data-target="skills">Skills</button>
+            <button data-action="open" data-target="resume">Full Resume</button>
+            <div class="hr"></div>
+            <button type="button" onclick="window.location.reload()">Restart System</button>
+          </div>
+        </div>
+
+        <div class="menu-item">
+          <button class="menuBtn" type="button" data-menu="contact">Contact</button>
+          <div class="dropdown" id="menu-contact">
+            <a href="mailto:waseem.sayyedahmad@gmail.com">Email Me</a>
+            <a href="tel:+18322473572">Call: (832) 247-3572</a>
+            <a href="https://linkedin.com/in/waseemsayyedahmad" target="_blank" rel="noreferrer">LinkedIn</a>
+            <a href="https://github.com/Waseem3216/Projects" target="_blank" rel="noreferrer">GitHub</a>
+            <a href="Waseem_Sayyedahmad_resume.pdf" target="_blank" rel="noreferrer">Open Resume PDF</a>
+          </div>
+        </div>
+
+        <div class="menu-item">
+          <button class="menuBtn" type="button" data-menu="tools">Tools</button>
+          <div class="dropdown" id="menu-tools">
+            <button type="button" data-app-action="search">Search Resume</button>
+            <button type="button" data-app-action="palette">Command Palette</button>
+            <button type="button" data-app-action="theme">Toggle Theme</button>
+            <div class="hr"></div>
+            <button type="button" data-app-action="open-all">Open All Windows</button>
+            <button type="button" data-app-action="minimize-all">Minimize All Windows</button>
+            <button type="button" data-app-action="reset-layout">Reset Layout</button>
+            <div class="hr"></div>
+            <button type="button" data-app-action="print">Print / Save PDF</button>
+            <button type="button" data-app-action="copy-summary">Copy Profile Summary</button>
+          </div>
+        </div>
+      </nav>
+
+      <div class="shell__body">
+        <main class="mainPane inset">
+          <div class="groupTitle">C:\RESUME\MAIN</div>
+
+          <section class="heroPanel" aria-label="Resume overview">
+            <div>
+              <h1>Waseem Sayyedahmad</h1>
+              <p>Computer Information Systems student focused on IAM Analysis, automation, Cloud Computing, data Analysis, and IT Solutions.</p>
+            </div>
+            <div class="heroStats" aria-label="Resume statistics">
+              <span><strong>3</strong> Experience Roles</span>
+              <span><strong>2</strong> Projects</span>
+              <span><strong>4</strong> Certifications</span>
+            </div>
+          </section>
+
+          <section class="toolbarPanel" aria-label="Resume quick tools">
+            <label for="quickSearch">Quick Search</label>
+            <input id="quickSearch" type="search" placeholder="Try: UiPath, Power BI, Active Directory, SQL..." autocomplete="off" />
+            <button id="quickSearchBtn" class="systemButton" type="button">Search</button>
+            <button id="commandPaletteBtn" class="systemButton" type="button">Commands</button>
+            <button id="themeToggleBtn" class="systemButton" type="button">Theme</button>
+          </section>
+
+          <div class="iconGrid">
+            <button class="iconBtn" onclick="openWindow('about')" type="button">
+              <div class="icon icon--info" aria-hidden="true"></div>
+              <span class="iconLabel">My Info</span>
+            </button>
+
+            <button class="iconBtn" onclick="openWindow('experience')" type="button">
+              <div class="icon icon--folder" aria-hidden="true"></div>
+              <span class="iconLabel">Experience</span>
+            </button>
+
+            <button class="iconBtn" onclick="openWindow('education')" type="button">
+              <div class="icon icon--edu" aria-hidden="true"></div>
+              <span class="iconLabel">Education</span>
+            </button>
+
+            <button class="iconBtn" onclick="openWindow('projects')" type="button">
+              <div class="icon icon--brief" aria-hidden="true"></div>
+              <span class="iconLabel">Projects</span>
+            </button>
+
+            <button class="iconBtn" onclick="openWindow('organizations')" type="button">
+              <div class="icon icon--group" aria-hidden="true"></div>
+              <span class="iconLabel">Organizations</span>
+            </button>
+
+            <button class="iconBtn" onclick="openWindow('honors')" type="button">
+              <div class="icon icon--star" aria-hidden="true"></div>
+              <span class="iconLabel">Honors</span>
+            </button>
+
+            <button class="iconBtn" onclick="openWindow('skills')" type="button">
+              <div class="icon icon--chip" aria-hidden="true"></div>
+              <span class="iconLabel">Skills</span>
+            </button>
+
+            <button class="iconBtn" onclick="openWindow('resume')" type="button">
+              <div class="icon icon--doc" aria-hidden="true"></div>
+              <span class="iconLabel">Full Resume</span>
+            </button>
+          </div>
+        </main>
+
+        <aside class="rightPane inset" aria-label="System Monitor">
+          <div class="sysTitle">System Monitor</div>
+          <div class="sysBody">
+            <div class="systemClock" aria-label="Local system clock">
+              <span id="clockTime">--:--</span>
+              <span id="clockDate">Loading date...</span>
+            </div>
+            <div class="sysSection">Resume Index</div>
+            <div class="sysRow">
+              <div class="sysKey">Profile Loaded</div>
+              <div class="meter-outer"><div class="meter-fill" style="width: 100%;"></div></div>
+              <div class="meter-label">WASEEM.EXE / READY</div>
+            </div>
+            <div class="sysRow">
+              <div class="sysKey">Skill Memory</div>
+              <div class="meter-outer"><div class="meter-fill memory-green" style="width: 92%;"></div></div>
+              <div class="meter-label">Cloud Operations/ Project Management / Data Analysis</div>
+            </div>
+
+            <div class="sysDivider"></div>
+
+            <div class="sysSection">Quick Facts</div>
+            <dl class="sysFacts">
+              <div><dt>Degree</dt><dd>B.S. CIS</dd></div>
+              <div><dt>Minor</dt><dd>Business Admin</dd></div>
+              <div><dt>GPA</dt><dd>3.70</dd></div>
+              <div><dt>Grad</dt><dd>Dec 2026</dd></div>
+            </dl>
+
+            <div class="sysDivider"></div>
+
+            <div class="sysSection">Network Activity</div>
+            <div class="network-viz" aria-hidden="true">
+              <div class="net-bar" style="height: 40%"></div>
+              <div class="net-bar" style="height: 70%"></div>
+              <div class="net-bar" style="height: 30%"></div>
+              <div class="net-bar" style="height: 90%"></div>
+              <div class="net-bar" style="height: 60%"></div>
+              <div class="net-bar" style="height: 85%"></div>
+            </div>
+            <div class="sysText small center">Portfolio modem - Connected</div>
+
+            <div class="sysDivider"></div>
+
+            <div class="sysSection">Instructions</div>
+            <ul class="bullets small">
+              <li>Click icons to open resume sections.</li>
+              <li>Drag blue title bars to move windows.</li>
+              <li>Use task strip buttons to restore minimized windows.</li>
+            </ul>
+          </div>
+        </aside>
+      </div>
+    </section>
+
+    <section class="window float" id="win-about" style="left: 6%; top: 10%; width: 520px;" hidden>
+      <header class="titlebar" data-drag-handle>
+        <div class="titlebar__left"><span class="sysicon" aria-hidden="true"></span> My Info</div>
+        <div class="winBtns">
+          <button class="winBtn" type="button" onclick="hideWindow('about')" aria-label="Minimize My Info">-</button>
+          <button class="winBtn" type="button" onclick="closeWindow('about')" aria-label="Close My Info">x</button>
+        </div>
+      </header>
+      <div class="content inset resumeContent">
+        <div class="resumeHeader">
+          <h2>Waseem Sayyedahmad</h2>
+          <p>Computer Information Systems student with hands-on experience in compliance systems, RPA, dashboards, identity/access support, and IT operations.</p>
+        </div>
+        <div class="contactGrid">
+          <a href="tel:+18322473572">(832) 247-3572</a>
+          <a href="mailto:waseem.sayyedahmad@gmail.com">waseem.sayyedahmad@gmail.com</a>
+          <a href="https://linkedin.com/in/waseemsayyedahmad" target="_blank" rel="noreferrer">LinkedIn</a>
+          <a href="https://github.com/Waseem3216/Projects" target="_blank" rel="noreferrer">GitHub</a>
+        </div>
+        <div class="hr"></div>
+        <div class="tags">
+          <span class="tag">Enterprise Administration</span>
+          <span class="tag">Automation</span>
+          <span class="tag">Power Platform</span>
+          <span class="tag">Cloud</span>
+          <span class="tag">IT Support</span>
+          <span class="tag">Data Dashboards</span>
+        </div>
+      </div>
+      <footer class="statusbar"><span>CONTACTS.DAT</span><span>4 links</span></footer>
+    </section>
+
+    <section class="window float windowLarge" id="win-experience" style="left: 8%; top: 12%; width: 760px; height: 470px;" hidden>
+      <header class="titlebar" data-drag-handle>
+        <div class="titlebar__left"><span class="sysicon" aria-hidden="true"></span> Experience</div>
+        <div class="winBtns">
+          <button class="winBtn" type="button" onclick="hideWindow('experience')" aria-label="Minimize Experience">-</button>
+          <button class="winBtn" type="button" onclick="closeWindow('experience')" aria-label="Close Experience">x</button>
+        </div>
+      </header>
+
+      <div class="content">
+        <div class="split">
+          <div class="pane inset sideList">
+            <div class="listbox">
+              <button class="listItem isSelected" type="button" data-role="entergy" onclick="showRole('entergy')">Entergy</button>
+              <button class="listItem" type="button" data-role="oceaneering" onclick="showRole('oceaneering')">Oceaneering</button>
+              <button class="listItem" type="button" data-role="uh" onclick="showRole('uh')">UH NSMIT</button>
+            </div>
+          </div>
+
+          <div class="pane inset rolePane">
+            <div id="role-entergy" class="role-content">
+              <div class="entryHeader">
+                <strong>Entergy Services, LLC</strong>
+                <span>Jan 2026 - May 2026</span>
+              </div>
+              <em>Compliance &amp; Systems Support Analyst Intern - The Woodlands, Texas</em>
+              <ul class="bullets">
+                <li>Developed Power Apps with token-based password-less authentication and RBAC, with SharePoint list logging to track user identity, access attempts, and authentication outcomes for auditing.</li>
+                <li>Created an Office 365 Group for 1,400+ employees and built a Power Automate workflow to maintain members data for access governance and group auditing.</li>
+                <li>Built Power BI, Cognos, and Tableau dashboards using data validation and QA to support outages, metrics reporting, and IBM Maximo operations.</li>
+              </ul>
+            </div>
+
+            <div id="role-oceaneering" class="role-content" hidden>
+              <div class="entryHeader">
+                <strong>Oceaneering International, Inc.</strong>
+                <span>May 2025 - Aug 2025</span>
+              </div>
+              <em>IT RPA Analyst Intern - Houston, Texas</em>
+              <ul class="bullets">
+                <li>Automated business processes using UiPath Studio and REFramework, saving 100+ hours through RPA development and CI/CD deployment.</li>
+                <li>Created PDDs, UAT plans, and process flow diagrams; supported Agile, SDLC, and change management practices across teams.</li>
+                <li>Applied systems thinking and a user-centered approach to analyze risks, train users, and document automation lifecycles.</li>
+              </ul>
+            </div>
+
+            <div id="role-uh" class="role-content" hidden>
+              <div class="entryHeader">
+                <strong>University of Houston NSMIT</strong>
+                <span>Nov 2024 - Dec 2025</span>
+              </div>
+              <em>IT HelpDesk/Desktop Support, Part-time - Houston, Texas</em>
+              <ul class="bullets">
+                <li>Delivered IT solutions and performed ticket triage, endpoint support, and systems imaging, ensuring SLA compliance and policy adherence.</li>
+                <li>Used Active Directory and Microsoft Entra ID to support user access, permission management, and identity-related troubleshooting.</li>
+                <li>Leveraged Microsoft 365 and Power Platform to streamline support workflows and improve operational efficiency.</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+      <footer class="statusbar"><span>EXPERIENCE.LOG</span><span>3 roles</span></footer>
+    </section>
+
+    <section class="window float" id="win-education" style="left: 14%; top: 18%; width: 650px; height: 430px;" hidden>
+      <header class="titlebar" data-drag-handle>
+        <div class="titlebar__left"><span class="sysicon" aria-hidden="true"></span> Education</div>
+        <div class="winBtns">
+          <button class="winBtn" type="button" onclick="hideWindow('education')" aria-label="Minimize Education">-</button>
+          <button class="winBtn" type="button" onclick="closeWindow('education')" aria-label="Close Education">x</button>
+        </div>
+      </header>
+
+      <div class="content inset resumeContent">
+        <div class="entryHeader">
+          <strong>University of Houston, Cullen College of Engineering</strong>
+          <span>Graduation: Dec 2026</span>
+        </div>
+        <p class="metaLine">Houston, Texas</p>
+        <p><strong>Bachelor of Science in Computer Information Systems</strong>, Business Administration Minor</p>
+        <p><strong>GPA:</strong> 3.70</p>
+        <div class="hr"></div>
+        <strong>Relevant Coursework</strong>
+        <div class="tags courseTags">
+          <span class="tag">User Experience (UX) Principles</span>
+          <span class="tag">Fundamentals of Information Security</span>
+          <span class="tag">Application Development</span>
+          <span class="tag">Infrastructure and Networking</span>
+          <span class="tag">Information Systems Operations/DevOps</span>
+          <span class="tag">IT Project Management</span>
+          <span class="tag">System Analysis &amp; Design</span>
+          <span class="tag">Database Design</span>
+          <span class="tag">Enterprise Applications</span>
+          <span class="tag">Information Visualization</span>
+        </div>
+      </div>
+      <footer class="statusbar"><span>EDUCATION.INI</span><span>10 courses</span></footer>
+    </section>
+
+    <section class="window float" id="win-projects" style="left: 18%; top: 22%; width: 660px; height: 390px;" hidden>
+      <header class="titlebar" data-drag-handle>
+        <div class="titlebar__left"><span class="sysicon" aria-hidden="true"></span> Projects</div>
+        <div class="winBtns">
+          <button class="winBtn" type="button" onclick="hideWindow('projects')" aria-label="Minimize Projects">-</button>
+          <button class="winBtn" type="button" onclick="closeWindow('projects')" aria-label="Close Projects">x</button>
+        </div>
+      </header>
+
+      <div class="content inset resumeContent">
+        <article class="resumeEntry">
+          <div class="entryHeader">
+            <strong>Updating Item Description &amp; File Download</strong>
+            <span>Aug 2025</span>
+          </div>
+          <p class="metaLine">UiPath, Oracle PS, Excel, OneDrive</p>
+          <p>Saved over 90 hours and 3,000 manual clicks by automating 30+ steps across two projects, leading process analysis, design, and development using VB.NET for unattended RPA deployment using UiPath.</p>
+        </article>
+
+        <div class="hr"></div>
+
+        <article class="resumeEntry">
+          <div class="entryHeader">
+            <strong>NSMIT 3D Printing Inventory App</strong>
+            <span>Feb 2025</span>
+          </div>
+          <p class="metaLine">Power Apps, Microsoft 365, Power Platform</p>
+          <p>Built a mobile-friendly SaaS solution with a Microsoft FX front-end and two SharePoint Lists back-end, replacing manual data entry with an automated interface.</p>
+        </article>
+      </div>
+      <footer class="statusbar"><span>PROJECTS.EXE</span><span>2 projects</span></footer>
+    </section>
+
+    <section class="window float" id="win-organizations" style="left: 22%; top: 20%; width: 560px; height: 330px;" hidden>
+      <header class="titlebar" data-drag-handle>
+        <div class="titlebar__left"><span class="sysicon" aria-hidden="true"></span> Student Organizations</div>
+        <div class="winBtns">
+          <button class="winBtn" type="button" onclick="hideWindow('organizations')" aria-label="Minimize Organizations">-</button>
+          <button class="winBtn" type="button" onclick="closeWindow('organizations')" aria-label="Close Organizations">x</button>
+        </div>
+      </header>
+
+      <div class="content inset resumeContent">
+        <article class="resumeEntry">
+          <div class="entryHeader">
+            <strong>Future IT Professionals (FITP)</strong>
+            <span>Aug 2024 - Present</span>
+          </div>
+          <p class="metaLine">Houston, Texas</p>
+          <p>Member &amp; Professional Development Coordinator</p>
+        </article>
+
+        <div class="hr"></div>
+
+        <article class="resumeEntry">
+          <div class="entryHeader">
+            <strong>AWS Cloud Club</strong>
+            <span>Jan 2026 - Present</span>
+          </div>
+          <p class="metaLine">Houston, Texas</p>
+          <p>Member</p>
+        </article>
+      </div>
+      <footer class="statusbar"><span>ORGS.GRP</span><span>2 memberships</span></footer>
+    </section>
+
+    <section class="window float" id="win-honors" style="left: 28%; top: 26%; width: 560px; height: 290px;" hidden>
+      <header class="titlebar" data-drag-handle>
+        <div class="titlebar__left"><span class="sysicon" aria-hidden="true"></span> Honors and Awards</div>
+        <div class="winBtns">
+          <button class="winBtn" type="button" onclick="hideWindow('honors')" aria-label="Minimize Honors">-</button>
+          <button class="winBtn" type="button" onclick="closeWindow('honors')" aria-label="Close Honors">x</button>
+        </div>
+      </header>
+
+      <div class="content inset resumeContent">
+        <ul class="bullets awardList">
+          <li><strong>FITP X BCO Tech Consulting Case Competition</strong> - 2nd Place, Spring 2025</li>
+          <li><strong>Dean's List</strong> - Fall/Spring 2022, Fall/Spring 2023, Fall/Spring 2025</li>
+        </ul>
+      </div>
+      <footer class="statusbar"><span>AWARDS.BAT</span><span>2 honors</span></footer>
+    </section>
+
+    <section class="window float windowLarge" id="win-skills" style="left: 12%; top: 15%; width: 760px; height: 470px;" hidden>
+      <header class="titlebar" data-drag-handle>
+        <div class="titlebar__left"><span class="sysicon" aria-hidden="true"></span> Skills and Certificates</div>
+        <div class="winBtns">
+          <button class="winBtn" type="button" onclick="hideWindow('skills')" aria-label="Minimize Skills">-</button>
+          <button class="winBtn" type="button" onclick="closeWindow('skills')" aria-label="Close Skills">x</button>
+        </div>
+      </header>
+
+      <div class="content inset resumeContent">
+        <section class="skillBlock">
+          <h3>Certifications</h3>
+          <div class="tags">
+            <span class="tag">Microsoft SC-300</span>
+            <span class="tag">Microsoft AZ-900</span>
+            <span class="tag">AWS Certified Cloud Practitioner</span>
+            <span class="tag">Tableau Desktop Foundations</span>
+          </div>
+        </section>
+
+        <section class="skillBlock">
+          <h3>IAM &amp; Enterprise Administration</h3>
+          <div class="tags">
+            <span class="tag">Active Directory</span><span class="tag">Group Policy</span><span class="tag">Microsoft Entra ID</span><span class="tag">Microsoft 365</span><span class="tag">AWS IAM</span><span class="tag">RBAC</span><span class="tag">Authentication</span><span class="tag">Authorization</span><span class="tag">Access Management</span><span class="tag">MFA</span><span class="tag">SSO</span><span class="tag">Access Control</span><span class="tag">Least Privilege</span><span class="tag">Identity Lifecycle Management</span><span class="tag">Audit Logging</span>
+          </div>
+        </section>
+
+        <section class="skillBlock">
+          <h3>Cloud / Platforms / ITSM</h3>
+          <div class="tags">
+            <span class="tag">AWS</span><span class="tag">Azure</span><span class="tag">Oracle</span><span class="tag">Power Platform</span><span class="tag">SCCM</span><span class="tag">ServiceNow</span><span class="tag">Jira</span><span class="tag">Trello</span>
+          </div>
+        </section>
+
+        <section class="skillBlock">
+          <h3>Automation / Scripting / Data</h3>
+          <div class="tags">
+            <span class="tag">Python</span><span class="tag">SQL</span><span class="tag">Bash</span><span class="tag">JSON</span><span class="tag">YAML</span><span class="tag">REST APIs</span><span class="tag">Postman</span><span class="tag">UiPath</span><span class="tag">GitHub</span><span class="tag">SSMS</span><span class="tag">DBeaver</span>
+          </div>
+        </section>
+
+        <section class="skillBlock">
+          <h3>Network / Diagnostics</h3>
+          <div class="tags">
+            <span class="tag">Cabling</span><span class="tag">OSI Model</span><span class="tag">Wireshark</span><span class="tag">IPv4</span><span class="tag">DNS</span><span class="tag">DHCP</span><span class="tag">TCP/IP</span><span class="tag">Ping</span><span class="tag">Traceroute</span><span class="tag">nslookup/dig</span><span class="tag">netstat</span>
+          </div>
+        </section>
+
+        <section class="skillBlock">
+          <h3>Languages</h3>
+          <div class="tags">
+            <span class="tag">Arabic</span>
+            <span class="tag">English</span>
+          </div>
+        </section>
+      </div>
+      <footer class="statusbar"><span>SKILLS.SYS</span><span>Complete skill matrix</span></footer>
+    </section>
+
+    <section class="window float windowLarge" id="win-resume" style="left: 10%; top: 6%; width: 820px; height: 560px;" hidden>
+      <header class="titlebar" data-drag-handle>
+        <div class="titlebar__left"><span class="sysicon" aria-hidden="true"></span> Full Resume</div>
+        <div class="winBtns">
+          <button class="winBtn" type="button" onclick="hideWindow('resume')" aria-label="Minimize Full Resume">-</button>
+          <button class="winBtn" type="button" onclick="closeWindow('resume')" aria-label="Close Full Resume">x</button>
+        </div>
+      </header>
+
+      <div class="content inset resumeContent fullResume">
+        <div class="resumeHeader centered">
+          <h2>Waseem Sayyedahmad</h2>
+          <p><a href="tel:+18322473572">(832) 247-3572</a> | <a href="mailto:waseem.sayyedahmad@gmail.com">waseem.sayyedahmad@gmail.com</a> | <a href="https://linkedin.com/in/waseemsayyedahmad" target="_blank" rel="noreferrer">LinkedIn</a> | <a href="https://github.com/Waseem3216/Projects" target="_blank" rel="noreferrer">GitHub</a></p>
+        </div>
+
+        <h3>Education</h3>
+        <p><strong>University of Houston, Cullen College of Engineering</strong> - Houston, Texas <span class="rightText">Graduation Date: Dec 2026</span><br>
+        Bachelor of Science in Computer Information Systems, Business Administration Minor <strong>GPA: 3.70</strong></p>
+        <p><strong>Relevant Coursework:</strong> User Experience (UX) Principles, Fundamentals of Information Security, Application Development, Infrastructure and Networking, Information Systems Operations/DevOps, IT Project Management, System Analysis &amp; Design, Database Design, Enterprise Applications, Information Visualization.</p>
+
+        <h3>Experience</h3>
+        <p><strong>Entergy Services, LLC</strong> - The Woodlands, Texas <span class="rightText">Jan 2026 - May 2026</span><br><em>Compliance &amp; Systems Support Analyst Intern</em></p>
+        <ul class="bullets">
+          <li>Developed Power Apps with token-based password-less authentication and RBAC, with SharePoint list logging to track user identity, access attempts, and authentication outcomes for auditing.</li>
+          <li>Created an Office 365 Group for 1,400+ employees and built a Power Automate workflow to maintain members data for access governance and group auditing.</li>
+          <li>Built Power BI, Cognos, and Tableau dashboards using data validation and QA to support outages, metrics reporting, and IBM Maximo operations.</li>
+        </ul>
+
+        <p><strong>Oceaneering International, Inc.</strong> - Houston, Texas <span class="rightText">May 2025 - Aug 2025</span><br><em>IT RPA Analyst Intern</em></p>
+        <ul class="bullets">
+          <li>Automated business processes using UiPath Studio and REFramework, saving 100+ hours through RPA development and CI/CD deployment.</li>
+          <li>Created PDDs, UAT plans, and process flow diagrams; supported Agile, SDLC, and change management practices across teams.</li>
+          <li>Applied systems thinking and a user-centered approach to analyze risks, train users, and document automation lifecycles.</li>
+        </ul>
+
+        <p><strong>University of Houston NSMIT</strong> - Houston, Texas <span class="rightText">Nov 2024 - Dec 2025</span><br><em>IT HelpDesk/Desktop Support (Part-time)</em></p>
+        <ul class="bullets">
+          <li>Delivered IT solutions and performed ticket triage, endpoint support, and systems imaging, ensuring SLA compliance and policy adherence.</li>
+          <li>Used Active Directory and Microsoft Entra ID to support user access, permission management, and identity-related troubleshooting.</li>
+          <li>Leveraged Microsoft 365 and Power Platform to streamline support workflows and improve operational efficiency.</li>
+        </ul>
+
+        <h3>Projects</h3>
+        <p><strong>Updating Item Description &amp; File Download</strong> - UiPath, Oracle PS, Excel, OneDrive <span class="rightText">Aug 2025</span><br>
+        Saved over 90 hours and 3,000 manual clicks by automating 30+ steps across two projects, leading process analysis, design, and development using VB.NET for unattended RPA deployment using UiPath.</p>
+        <p><strong>NSMIT 3D Printing Inventory App</strong> - Power Apps, Microsoft 365, Power Platform <span class="rightText">Feb 2025</span><br>
+        Built a mobile-friendly SaaS solution with a Microsoft FX front-end and two SharePoint Lists back-end, replacing manual data entry with an automated interface.</p>
+
+        <h3>Student Organization</h3>
+        <p><strong>Future IT Professionals (FITP)</strong> - Houston, Texas <span class="rightText">Aug 2024 - Present</span><br>Member &amp; Professional Development Coordinator</p>
+        <p><strong>AWS Cloud Club</strong> - Houston, Texas <span class="rightText">Jan 2026 - Present</span><br>Member</p>
+
+        <h3>Honors and Awards</h3>
+        <ul class="bullets">
+          <li>FITP X BCO Tech Consulting Case Competition - 2nd Place: Spring 2025</li>
+          <li>Dean's List: Fall/Spring 2022, Fall/Spring 2023, Fall/Spring 2025</li>
+        </ul>
+
+        <h3>Skills and Certificates</h3>
+        <p><strong>Certifications:</strong> Microsoft: SC-300, AZ-900; AWS Certified Cloud Practitioner; Tableau Desktop Foundations.</p>
+        <p><strong>IAM &amp; Enterprise Administration:</strong> Active Directory, Group Policy, Microsoft Entra ID, Microsoft 365, AWS IAM, RBAC, authentication, authorization, access management, MFA, SSO, access control, least privilege, identity lifecycle management, audit logging.</p>
+        <p><strong>Cloud / Platforms / ITSM:</strong> AWS, Azure, Oracle, Power Platform, SCCM, ServiceNow, Jira, Trello.</p>
+        <p><strong>Automation / Scripting / Data:</strong> Python, SQL, Bash, JSON, YAML, REST APIs, Postman, UiPath, GitHub, SSMS, DBeaver.</p>
+        <p><strong>Network / Diagnostics:</strong> Cabling, OSI Model, Wireshark; IPv4, DNS; DHCP; TCP/IP, Ping; Traceroute; nslookup/dig; netstat.</p>
+        <p><strong>Languages:</strong> Arabic, English.</p>
+      </div>
+      <footer class="statusbar"><span>FULL_RESUME.TXT</span><span><a href="Waseem_Sayyedahmad_resume.pdf" target="_blank" rel="noreferrer">Open PDF</a> · <button class="linkButton" type="button" data-app-action="print">Print</button> · <button class="linkButton" type="button" data-app-action="copy-summary">Copy Summary</button></span></footer>
+    </section>
+
+
+    <div id="searchPanel" class="modalLayer" hidden aria-hidden="true">
+      <section class="window modalWindow" role="dialog" aria-modal="true" aria-labelledby="searchTitle">
+        <header class="titlebar">
+          <div class="titlebar__left"><span class="sysicon" aria-hidden="true"></span><span id="searchTitle">Search Resume Database</span></div>
+          <div class="winBtns"><button class="winBtn" type="button" data-close-modal="searchPanel" aria-label="Close Search">x</button></div>
+        </header>
+        <div class="modalBody inset">
+          <label for="globalSearchInput" class="fieldLabel">Search across experience, projects, education, skills, honors, and organizations</label>
+          <div class="searchRow">
+            <input id="globalSearchInput" type="search" placeholder="Search resume keywords..." autocomplete="off" />
+            <button id="clearSearchBtn" class="systemButton" type="button">Clear</button>
+          </div>
+          <div id="searchMeta" class="searchMeta">Type to search the indexed resume content.</div>
+          <div id="searchResults" class="searchResults" role="list"></div>
+        </div>
+      </section>
+    </div>
+
+    <div id="commandPalette" class="modalLayer" hidden aria-hidden="true">
+      <section class="window commandWindow" role="dialog" aria-modal="true" aria-labelledby="commandTitle">
+        <header class="titlebar">
+          <div class="titlebar__left"><span class="sysicon" aria-hidden="true"></span><span id="commandTitle">Command Palette</span></div>
+          <div class="winBtns"><button class="winBtn" type="button" data-close-modal="commandPalette" aria-label="Close Command Palette">x</button></div>
+        </header>
+        <div class="modalBody inset">
+          <input id="commandInput" class="commandInput" type="search" placeholder="Type a command or section name..." autocomplete="off" />
+          <div class="commandHint">Shortcut: Ctrl/⌘ + K. Use ↑/↓ and Enter.</div>
+          <div id="commandList" class="commandList" role="listbox" aria-label="Available commands"></div>
+        </div>
+      </section>
+    </div>
+
+    <div id="toastRegion" class="toastRegion" aria-live="polite" aria-atomic="true"></div>
+
+    <div id="taskStrip" class="task-strip" aria-label="Open windows task strip"></div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
