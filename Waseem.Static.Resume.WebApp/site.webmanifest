@@ -1,0 +1,23 @@
+{
+  "name": "Waseem Sayyedahmad Resume",
+  "short_name": "Waseem",
+  "description": "Waseem Sayyedahmad resume website.",
+  "start_url": ".",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#102452",
+  "icons": [
+    {
+      "src": "assets/icons/favicon-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "assets/icons/favicon-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    }
+  ]
+}
