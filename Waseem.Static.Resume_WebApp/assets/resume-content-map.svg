@@ -1,0 +1,60 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1500" height="780" viewBox="0 0 1500 780" role="img" aria-label="Resume content map">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#f4f7fb"/><stop offset="100%" stop-color="#d7e8ff"/></linearGradient>
+    <linearGradient id="bar" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#000080"/><stop offset="100%" stop-color="#102452"/></linearGradient>
+    <filter id="shadow"><feDropShadow dx="5" dy="5" stdDeviation="0" flood-color="#000" flood-opacity=".28"/></filter>
+  </defs>
+  <rect width="1500" height="780" fill="url(#bg)"/>
+  <text x="750" y="58" text-anchor="middle" font-family="Tahoma, Arial" font-size="44" font-weight="700" fill="#000080">Resume Data Dictionary</text>
+  <text x="750" y="96" text-anchor="middle" font-family="Tahoma, Arial" font-size="22" fill="#102452">The portfolio content exposed through draggable desktop windows</text>
+  <g font-family="Tahoma, Arial" filter="url(#shadow)">
+    <g transform="translate(80 150)">
+      <rect width="410" height="210" fill="#c0c0c0" stroke="#ffffff" stroke-width="3"/><rect x="8" y="8" width="394" height="42" fill="url(#bar)"/>
+      <text x="205" y="36" text-anchor="middle" font-size="22" font-weight="700" fill="#fff">Experience</text>
+      <rect x="24" y="74" width="362" height="102" fill="#fff" stroke="#404040"/>
+      <text x="45" y="110" font-size="18" fill="#000">• Entergy Services — Compliance Systems</text>
+      <text x="45" y="142" font-size="18" fill="#000">• Oceaneering — IT RPA Analysis</text>
+      <text x="45" y="174" font-size="18" fill="#000">• UH NSMIT — Desktop Support</text>
+    </g>
+    <g transform="translate(545 150)">
+      <rect width="410" height="210" fill="#c0c0c0" stroke="#ffffff" stroke-width="3"/><rect x="8" y="8" width="394" height="42" fill="url(#bar)"/>
+      <text x="205" y="36" text-anchor="middle" font-size="22" font-weight="700" fill="#fff">Education</text>
+      <rect x="24" y="74" width="362" height="102" fill="#fff" stroke="#404040"/>
+      <text x="45" y="110" font-size="18" fill="#000">• University of Houston</text>
+      <text x="45" y="142" font-size="18" fill="#000">• B.S. Computer Information Systems</text>
+      <text x="45" y="174" font-size="18" fill="#000">• Business Admin Minor · GPA 3.70</text>
+    </g>
+    <g transform="translate(1010 150)">
+      <rect width="410" height="210" fill="#c0c0c0" stroke="#ffffff" stroke-width="3"/><rect x="8" y="8" width="394" height="42" fill="url(#bar)"/>
+      <text x="205" y="36" text-anchor="middle" font-size="22" font-weight="700" fill="#fff">Projects</text>
+      <rect x="24" y="74" width="362" height="102" fill="#fff" stroke="#404040"/>
+      <text x="45" y="110" font-size="18" fill="#000">• UiPath file/download automation</text>
+      <text x="45" y="142" font-size="18" fill="#000">• NSMIT 3D Printing Inventory App</text>
+      <text x="45" y="174" font-size="18" fill="#000">• Power Platform + SharePoint solutions</text>
+    </g>
+    <g transform="translate(80 420)">
+      <rect width="410" height="210" fill="#c0c0c0" stroke="#ffffff" stroke-width="3"/><rect x="8" y="8" width="394" height="42" fill="url(#bar)"/>
+      <text x="205" y="36" text-anchor="middle" font-size="22" font-weight="700" fill="#fff">Skills</text>
+      <rect x="24" y="74" width="362" height="102" fill="#fff" stroke="#404040"/>
+      <text x="45" y="110" font-size="18" fill="#000">• IAM, RBAC, Entra ID, Active Directory</text>
+      <text x="45" y="142" font-size="18" fill="#000">• AWS, Azure, Power Platform, ITSM</text>
+      <text x="45" y="174" font-size="18" fill="#000">• Python, SQL, Bash, REST, UiPath</text>
+    </g>
+    <g transform="translate(545 420)">
+      <rect width="410" height="210" fill="#c0c0c0" stroke="#ffffff" stroke-width="3"/><rect x="8" y="8" width="394" height="42" fill="url(#bar)"/>
+      <text x="205" y="36" text-anchor="middle" font-size="22" font-weight="700" fill="#fff">Organizations</text>
+      <rect x="24" y="74" width="362" height="102" fill="#fff" stroke="#404040"/>
+      <text x="45" y="110" font-size="18" fill="#000">• Future IT Professionals</text>
+      <text x="45" y="142" font-size="18" fill="#000">• Professional Development Coordinator</text>
+      <text x="45" y="174" font-size="18" fill="#000">• AWS Cloud Club member</text>
+    </g>
+    <g transform="translate(1010 420)">
+      <rect width="410" height="210" fill="#c0c0c0" stroke="#ffffff" stroke-width="3"/><rect x="8" y="8" width="394" height="42" fill="url(#bar)"/>
+      <text x="205" y="36" text-anchor="middle" font-size="22" font-weight="700" fill="#fff">Honors</text>
+      <rect x="24" y="74" width="362" height="102" fill="#fff" stroke="#404040"/>
+      <text x="45" y="110" font-size="18" fill="#000">• FITP x BCO Case Competition</text>
+      <text x="45" y="142" font-size="18" fill="#000">• 2nd Place · Spring 2025</text>
+      <text x="45" y="174" font-size="18" fill="#000">• Dean's List: 2022, 2023, 2025</text>
+    </g>
+  </g>
+</svg>
