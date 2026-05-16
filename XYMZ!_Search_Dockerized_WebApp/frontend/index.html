@@ -1,0 +1,1259 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>XYMZ! Search | Dockerized Web Services</title>
+  <link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32x32.png" />
+  <link rel="icon" type="image/png" sizes="16x16" href="assets/favicon-16x16.png" />
+  <link rel="shortcut icon" href="assets/favicon.ico" />
+  <link rel="apple-touch-icon" sizes="180x180" href="assets/favicon-180.png" />
+  <style>
+    :root {
+      --purple: #5b4a94;
+      --purple-dark: #3b2a70;
+      --blue: #0050bf;
+      --red: #d60000;
+      --cream: #fffbd1;
+      --pale-yellow: #ffffdd;
+      --panel: #ffffe8;
+      --panel2: #d9f4ff;
+      --gold: #ffd45a;
+      --gold2: #fff2aa;
+      --edge: #83784c;
+      --shadow: rgba(70,60,110,.26);
+      --green-screen: #0cff3d;
+    }
+
+    * { box-sizing: border-box; }
+
+    html, body {
+      margin: 0;
+      min-height: 100%;
+      font-family: Arial, Helvetica, sans-serif;
+      font-size: 16px;
+      color: #111;
+      cursor: default;
+      /* Plain retro background: no scanline/grid texture */
+      background: linear-gradient(#f7f0b8 0%, #ffffe8 36%, #eee8ff 100%);
+    }
+
+    body.theme-ocean {
+      --purple: #1475a5;
+      --purple-dark: #084467;
+      --gold: #7ee8ff;
+      --gold2: #dbfbff;
+      --panel: #efffff;
+      --pale-yellow: #f2ffff;
+      --edge: #2d8395;
+      background: linear-gradient(#d9fbff 0%, #faffff 42%, #d4ecff 100%);
+    }
+
+    body.theme-candy {
+      --purple: #b3469e;
+      --purple-dark: #732d72;
+      --gold: #ffb8f1;
+      --gold2: #fff0fb;
+      --panel: #fff4fb;
+      --pale-yellow: #fff6fe;
+      --edge: #9a6298;
+      background: linear-gradient(#fff2fb 0%, #fffdfd 42%, #f3e1ff 100%);
+    }
+
+    body.theme-matrix {
+      --purple: #044d19;
+      --purple-dark: #01280b;
+      --gold: #7cff7c;
+      --gold2: #d9ffd6;
+      --panel: #eaffea;
+      --panel2: #d5ffd5;
+      --pale-yellow: #f2fff0;
+      --edge: #1a6c2c;
+      background: linear-gradient(#e2ffd7 0%, #f9fff3 50%, #d5ffe0 100%);
+    }
+
+    a { color: #0000cc; text-decoration: underline; }
+    a:visited { color: #551a8b; }
+    button, input, select, textarea { font-family: Arial, Helvetica, sans-serif; }
+
+    .scanlines {
+      display: none;
+    }
+
+    .page {
+      width: min(1160px, calc(100% - 20px));
+      margin: 10px auto;
+      background: var(--pale-yellow);
+      border: 2px solid var(--edge);
+      box-shadow: 8px 8px 0 var(--shadow);
+      overflow: hidden;
+      position: relative;
+    }
+
+    .topbar {
+      background: linear-gradient(#7966c1, var(--purple-dark));
+      color: #fff;
+      border-bottom: 2px solid #241747;
+      font-size: 14px;
+      padding: 0;
+      display: flex;
+      justify-content: space-between;
+      align-items: stretch;
+      gap: 8px;
+    }
+
+    .topbar nav { display: flex; flex-wrap: wrap; }
+    .topbar a {
+      color: #fff;
+      text-decoration: none;
+      font-weight: bold;
+      padding: 7px 13px;
+      border-right: 1px solid rgba(255,255,255,.18);
+      text-shadow: 1px 1px #241747;
+    }
+    .topbar a:hover,
+    .topbar a.active {
+      background: rgba(255,255,255,.18);
+      outline: 1px dotted #fff;
+      text-decoration: underline;
+    }
+
+    .ticker {
+      min-width: 260px;
+      flex: 1 1 260px;
+      display: flex;
+      align-items: center;
+      overflow: hidden;
+      color: #fff8aa;
+      font-size: 13px;
+      font-weight: bold;
+      text-shadow: 1px 1px #241747;
+      padding-right: 8px;
+    }
+    .ticker marquee { width: 100%; }
+
+    .adbar {
+      margin: 8px;
+      border: 3px outset #ddd;
+      background: #f3f3ff;
+      color: #bd0000;
+      text-align: center;
+      font-size: 15px;
+      padding: 6px;
+      letter-spacing: .2px;
+    }
+    .adbar strong { color: #0054c9; }
+
+    .control-strip {
+      margin: 0 8px 8px;
+      border: 2px ridge #cfc178;
+      background: #fff6b8;
+      padding: 5px 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      flex-wrap: wrap;
+      font-size: 13px;
+    }
+
+    .main-grid {
+      display: grid;
+      grid-template-columns: minmax(170px, 210px) minmax(0, 1fr) minmax(190px, 240px);
+      gap: 10px;
+      padding: 0 10px 12px;
+      align-items: start;
+    }
+
+    .sidebar, .rightbar, .center-column { min-width: 0; }
+    .sidebar, .rightbar { align-self: start; }
+
+    .panel {
+      border: 2px ridge #bdb176;
+      background: var(--panel);
+      margin-bottom: 10px;
+      box-shadow: inset 1px 1px #fff, inset -1px -1px #d3ca9c;
+    }
+
+    .panel h2 {
+      font-size: 18px;
+      margin: 0;
+      padding: 6px 7px;
+      background: linear-gradient(var(--gold2), var(--gold));
+      color: #5a2300;
+      border-bottom: 1px solid #b89838;
+      text-shadow: 1px 1px #fff6c1;
+    }
+
+    .panel ul { margin: 0; padding: 4px 0; list-style: none; font-size: 15px; }
+    .panel li { padding: 6px 9px; border-bottom: 1px solid #e2d99c; }
+    .panel li:last-child { border-bottom: 0; }
+    .panel li::before { content: "• "; color: #b00000; font-weight: bold; }
+
+    .today { background: var(--panel2); border-color: #86b8ca; }
+    .today h2 { background: linear-gradient(#b4e9ff, #69c5e8); color: #003a60; text-shadow: 1px 1px #dff7ff; }
+
+    .badge-rack { text-align: center; padding: 8px 6px; }
+
+    .view { display: none; }
+    .view.active { display: block; }
+
+    .hero {
+      text-align: center;
+      padding: 8px 8px 0;
+      min-width: 0;
+    }
+
+    .logo-wrap {
+      width: 100%;
+      max-width: 550px;
+      margin: 10px auto 8px;
+      padding: 8px 12px 2px;
+      background: transparent;
+      text-align: center;
+    }
+
+    .logo {
+      width: min(360px, 86%);
+      height: auto;
+      display: block;
+      margin: 0 auto;
+      filter: drop-shadow(2px 3px 0 rgba(0,0,0,.18));
+    }
+
+    .home-blurb { margin: 4px auto 7px; text-align: center; }
+    .tagline {
+      margin: 0 auto 4px;
+      font-family: Georgia, 'Times New Roman', serif;
+      font-size: 19px;
+      color: #6a0000;
+      font-weight: bold;
+    }
+    .question {
+      margin: 0 0 2px;
+      font-size: 31px;
+      line-height: 1.05;
+      color: #d20a0a;
+      font-weight: 900;
+      text-shadow: 1px 1px #fff, 2px 2px #ffd59a;
+    }
+    .question span { color: #222; font-size: 15px; display: block; font-weight: bold; text-shadow: none; margin-top: 2px; }
+
+    .search-box {
+      width: min(650px, 100%);
+      margin: 0 auto;
+      border: 4px double #928b64;
+      background: linear-gradient(#fff9c9, #fff2a9);
+      padding: 12px;
+      box-shadow: inset 1px 1px #fff, 3px 3px 0 rgba(0,0,0,.08);
+    }
+    .search-form { display: grid; grid-template-columns: 1fr auto; gap: 6px; align-items: center; }
+    #q {
+      width: 100%;
+      font-size: 22px;
+      padding: 6px 9px;
+      border: 3px inset #d0d0d0;
+      background: white;
+      min-height: 42px;
+    }
+
+    .button-row { margin-top: 8px; display: flex; justify-content: center; flex-wrap: wrap; gap: 7px; }
+    .btn {
+      border: 2px outset #fff;
+      background: linear-gradient(#fff, #c7c7c7);
+      color: #111;
+      font-size: 14px;
+      font-weight: bold;
+      padding: 6px 10px;
+      cursor: pointer;
+      min-width: 88px;
+      box-shadow: 1px 1px 0 rgba(0,0,0,.18);
+    }
+    .btn:active { border-style: inset; transform: translateY(1px); box-shadow: none; }
+    .btn.primary { background: linear-gradient(#fff5bf, #ffb13b); color: #7d0000; }
+    .btn.go { font-size: 16px; padding-inline: 16px; }
+    .btn.tiny { min-width: 0; padding: 3px 6px; font-size: 12px; }
+    .btn.fun { background: linear-gradient(#e8ffff, #70ddff); color: #003d73; }
+
+    .search-options { margin-top: 8px; display: flex; justify-content: center; gap: 12px; flex-wrap: wrap; font-size: 14px; }
+    .search-options label { white-space: nowrap; }
+
+    .status-box { margin-top: 8px; font-size: 13px; color: #333; min-height: 18px; }
+    .progress-wrap {
+      display: none;
+      margin-top: 8px;
+      border: 2px inset #ddd;
+      background: #fff;
+      padding: 2px;
+      height: 22px;
+    }
+    .progress-wrap.active { display: block; }
+    .progress-bar {
+      height: 100%;
+      width: 0%;
+      background: repeating-linear-gradient(90deg, #2d72ff 0 12px, #79dfff 12px 24px);
+      transition: width .16s linear;
+    }
+
+    .links-strip {
+      width: min(760px, 100%);
+      margin: 10px auto 0;
+      padding: 7px;
+      border-top: 1px solid #b5a36a;
+      border-bottom: 1px solid #b5a36a;
+      font-size: 14px;
+      line-height: 1.8;
+    }
+    .links-strip a { margin: 0 5px; white-space: nowrap; }
+
+    .mini-search {
+      width: min(640px, 100%);
+      margin: 10px auto 0;
+      border: 2px inset #ddd;
+      background: #fff;
+      text-align: left;
+      font-family: 'Courier New', Courier, monospace;
+      font-size: 13px;
+    }
+    .mini-search .mini-head { background: #e5e5e5; border-bottom: 1px solid #bbb; padding: 4px 7px; font-family: Arial, Helvetica, sans-serif; font-weight: bold; color: #333; }
+    .mini-search .mini-body { padding: 8px; }
+    .mini-search strong { color: #b00000; }
+
+    .directory {
+      margin: 14px auto 0;
+      width: min(760px, 100%);
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 8px;
+      text-align: left;
+    }
+    .directory .card { border: 2px ridge #9fa769; background: #f4ffd7; padding: 9px 10px; min-height: 86px; }
+    .directory h3 { margin: 0 0 5px; color: #15408c; font-size: 18px; text-decoration: underline; }
+    .directory p { margin: 0; font-size: 13px; line-height: 1.45; }
+    .stamp { text-align: center; font-size: 11px; color: #4b4b4b; margin: 8px 0 2px; }
+
+    .results-window {
+      display: none;
+      width: min(760px, 100%);
+      margin: 14px auto 0;
+      border: 3px ridge #8d84b9;
+      background: #fff;
+      text-align: left;
+      box-shadow: 4px 4px 0 rgba(0,0,0,.13);
+    }
+    .results-window.active { display: block; }
+    .window-title {
+      background: linear-gradient(#6c5ab3, #342565);
+      color: #fff;
+      font-weight: bold;
+      padding: 5px 8px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 8px;
+      font-size: 14px;
+      text-shadow: 1px 1px #000;
+    }
+    .window-title .lights span { display: inline-block; width: 11px; height: 11px; border-radius: 50%; border: 1px solid #333; margin-left: 3px; background: #ffea4c; }
+    .window-title .lights span:first-child { background: #ff6262; }
+    .window-title .lights span:last-child { background: #62ff80; }
+    .results-tools { background: #e9e9ff; border-bottom: 1px solid #bdbdef; padding: 6px 8px; font-size: 13px; }
+    .results-body { padding: 8px; }
+    .result-card {
+      padding: 9px 8px;
+      border-bottom: 1px dotted #b0b0b0;
+      background: #fff;
+    }
+    .result-card:nth-child(odd) { background: #fffff4; }
+    .result-card h3 { margin: 0 0 3px; font-size: 17px; }
+    .result-url { color: #008000; font-size: 12px; word-break: break-all; }
+    .result-desc { margin: 4px 0 6px; font-size: 13px; line-height: 1.4; }
+    .result-actions a { margin-right: 10px; font-size: 12px; }
+
+    .tool-grid {
+      margin: 12px auto 0;
+      width: min(760px, 100%);
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+      text-align: left;
+    }
+    .tool-card { border: 2px ridge #bdb176; background: #ffffe6; padding: 9px; }
+    .tool-card h3 { margin: -9px -9px 8px; padding: 5px 7px; background: linear-gradient(var(--gold2), var(--gold)); color: #5a2300; font-size: 17px; border-bottom: 1px solid #b89838; }
+    .tool-card input, .tool-card textarea, .tool-card select { width: 100%; margin: 4px 0 7px; border: 2px inset #ddd; padding: 5px; font-size: 13px; background: #fff; }
+    .tool-card textarea { min-height: 72px; resize: vertical; }
+    .tool-card ul { margin: 6px 0 0; padding-left: 18px; font-size: 13px; }
+    .tool-output { border: 2px inset #ddd; background: #fff; padding: 7px; min-height: 52px; font-size: 13px; line-height: 1.45; }
+
+    .info-page {
+      text-align: left;
+      border: 4px double #928b64;
+      background: #fffbe8;
+      padding: 12px;
+      box-shadow: inset 0 0 0 1px #fff;
+      min-height: 560px;
+    }
+    .info-head { display: grid; grid-template-columns: 130px 1fr; gap: 12px; align-items: center; border-bottom: 2px solid #d4c374; padding-bottom: 8px; margin-bottom: 10px; }
+    .info-logo { width: 125px; max-width: 100%; filter: drop-shadow(1px 2px 0 rgba(0,0,0,.18)); }
+    .info-page h1 { color: #d20a0a; font-size: 32px; line-height: 1.05; margin: 0 0 3px; text-shadow: 1px 1px #fff, 2px 2px #ffd59a; }
+    .info-page .subtitle { margin: 0; font-weight: bold; color: #5a2300; font-size: 15px; }
+    .info-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 9px; margin-top: 10px; }
+    .info-card { border: 2px ridge #bdb176; background: #ffffe6; padding: 9px; min-height: 112px; }
+    .info-card.full { grid-column: 1 / -1; }
+    .info-card h2 { margin: -9px -9px 8px; padding: 6px 8px; font-size: 18px; background: linear-gradient(var(--gold2), var(--gold)); border-bottom: 1px solid #b89838; color: #5a2300; }
+    .info-card p, .info-card li { font-size: 14px; line-height: 1.48; }
+    .info-card ul, .info-card ol { margin: 0; padding-left: 20px; }
+    .info-card p { margin: 0 0 8px; }
+    .notice-box { border: 2px inset #ddd; background: #fff; padding: 8px; font-family: 'Courier New', Courier, monospace; font-size: 13px; color: #333; }
+
+    .footer {
+      width: 100%;
+      clear: both;
+      background: linear-gradient(#6c5ab3, var(--purple-dark));
+      color: white;
+      padding: 8px 10px;
+      font-size: 12px;
+      text-align: center;
+      border-top: 2px solid #2d2350;
+    }
+    .footer a { color: white; margin: 0 6px; text-decoration: none; }
+    .footer a:hover { text-decoration: underline; }
+
+    .web-buddy {
+      position: fixed;
+      right: 18px;
+      bottom: 18px;
+      width: 260px;
+      border: 3px outset #ddd;
+      background: #ffffd7;
+      box-shadow: 6px 6px 0 rgba(0,0,0,.18);
+      z-index: 20;
+      display: none;
+    }
+    .web-buddy.active { display: block; }
+    .buddy-title { background: linear-gradient(#ffef92, #ff9b24); padding: 5px 7px; color: #5a2300; font-weight: bold; display: flex; justify-content: space-between; align-items: center; }
+    .buddy-body { padding: 8px; font-size: 13px; line-height: 1.35; }
+    .buddy-avatar { float: left; font-size: 36px; margin: 2px 8px 4px 0; }
+
+    .sparkle {
+      position: fixed;
+      pointer-events: none;
+      z-index: 998;
+      color: #fff100;
+      text-shadow: 0 0 4px #ff00d4, 0 0 7px #008cff;
+      animation: sparkle-pop .8s linear forwards;
+      font-size: 16px;
+    }
+    @keyframes sparkle-pop {
+      0% { transform: translate(-50%, -50%) scale(.2) rotate(0deg); opacity: 1; }
+      100% { transform: translate(-50%, -90%) scale(1.15) rotate(220deg); opacity: 0; }
+    }
+
+    .blink { animation: blink 1s steps(2, start) infinite; }
+    @keyframes blink { to { visibility: hidden; } }
+
+    .web-ring {
+      margin: 10px auto 0;
+      width: min(600px, 100%);
+      border: 2px ridge #c9b553;
+      background: #fff8bc;
+      padding: 7px;
+      font-size: 13px;
+      text-align: center;
+    }
+
+    .recent-list a, .saved-list a, .site-list a { display: block; padding: 2px 0; word-break: break-word; }
+
+    @media (max-width: 990px) {
+      .main-grid { grid-template-columns: 1fr; }
+      .sidebar, .rightbar { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+      .panel { margin-bottom: 0; }
+      .ticker { display: none; }
+    }
+    @media (max-width: 720px) {
+      .page { width: calc(100% - 8px); margin: 4px auto; }
+      .search-form { grid-template-columns: 1fr; }
+      .question { font-size: 25px; }
+      .logo { width: min(315px, 90%); }
+      .directory, .info-grid, .tool-grid { grid-template-columns: 1fr; }
+      .sidebar, .rightbar { grid-template-columns: 1fr; }
+      .topbar { flex-wrap: wrap; }
+      .topbar nav { width: 100%; }
+      .topbar a { flex: 1 1 auto; text-align: center; }
+      #q { font-size: 18px; }
+      .info-head { grid-template-columns: 1fr; text-align: center; }
+      .info-logo { margin: 0 auto; }
+      .web-buddy { right: 8px; left: 8px; width: auto; }
+    }
+  </style>
+</head>
+<body>
+  <div class="scanlines" aria-hidden="true"></div>
+
+  <div class="page">
+    <div class="topbar">
+      <nav aria-label="Main navigation">
+        <a href="#home" data-page="home" class="active">Home</a>
+        <a href="#about" data-page="about">About</a>
+        <a href="#help" data-page="help">Help</a>
+        <a href="#corporate" data-page="corporate">Corporate Services</a>
+      </nav>
+      <div class="ticker"><marquee scrollamount="4">XYMZ is indexing the whole wide web... 56k friendly since 2001! ★ Now with Web, Images, News, Videos, Wikipedia, Maps, AnswerBot, Web Rings, Guestbook &amp; Sparkle Mode!</marquee></div>
+    </div>
+
+    <div class="adbar">
+      <strong>Sponsored Link:</strong> Serious surfers only! Search <em>anything &amp; everything</em> with XYMZ! <span class="blink">NEW!</span>
+    </div>
+
+    <div class="control-strip">
+      <strong>Control Panel:</strong>
+      <button class="btn tiny fun" id="soundBtn" type="button">Sound FX: OFF</button>
+      <label>Theme
+        <select id="themeSelect" aria-label="Theme selector">
+          <option value="classic">Classic 2001</option>
+          <option value="ocean">Aqua Portal</option>
+          <option value="candy">Candy Browser</option>
+          <option value="matrix">Matrix Green</option>
+        </select>
+      </label>
+      <button class="btn tiny" id="buddyBtn" type="button">Summon Web Buddy</button>
+    </div>
+
+    <main class="main-grid">
+      <aside class="sidebar" aria-label="Search channels">
+        <section class="panel">
+          <h2>May I Suggest?</h2>
+          <ul>
+            <li><a href="#" data-fill="best personal websites">Personal Pages</a></li>
+            <li><a href="#" data-fill="latest internet news">News &amp; Media</a></li>
+            <li><a href="#" data-fill="stock market quotes">Money</a></li>
+            <li><a href="#" data-fill="cheap flights travel guide">Travel</a></li>
+            <li><a href="#" data-fill="health questions answered">Health</a></li>
+            <li><a href="#" data-fill="computer tutorials">Computers</a></li>
+            <li><a href="#" data-fill="movie music games entertainment">Entertainment</a></li>
+            <li><a href="#" data-fill="shopping deals online">Shopping</a></li>
+          </ul>
+        </section>
+
+        <section class="panel today">
+          <h2>XYMZ Kids!</h2>
+          <ul>
+            <li><a href="#" data-fill="homework help">Homework Help</a></li>
+            <li><a href="#" data-fill="safe science projects">Science Projects</a></li>
+            <li><a href="#" data-fill="fun facts for kids">Fun Facts</a></li>
+          </ul>
+        </section>
+
+        <section class="panel">
+          <h2>Saved Searches</h2>
+          <ul id="savedSearches" class="saved-list">
+            <li>No saved searches yet.</li>
+          </ul>
+          <div class="badge-rack"><button class="btn tiny" id="saveSearchBtn" type="button">Save Current Search</button></div>
+        </section>
+
+        <section class="panel">
+          <h2>Web Rings</h2>
+          <ul>
+            <li><a href="#" data-fill="retro websites web ring">Retro Websites</a></li>
+            <li><a href="#" data-fill="indie web directories">Indie Web</a></li>
+            <li><a href="#" data-fill="old internet archives">Old Internet</a></li>
+          </ul>
+        </section>
+      </aside>
+
+      <section class="center-column" aria-live="polite">
+        <div id="home" class="view active hero" aria-labelledby="xymz-title">
+          <div class="logo-wrap">
+            <img class="logo" src="assets/XYMZSearch-cropped.png" alt="XYMZ Search logo" />
+          </div>
+
+          <div class="home-blurb" id="xymz-title">
+            <p class="tagline">It&apos;s amazing where a search can take you.</p>
+            <div class="question">Have a Question?<span>Just type it in and click Search!</span></div>
+          </div>
+
+          <section class="search-box" aria-label="XYMZ web search">
+            <form id="searchForm" class="search-form">
+              <input id="q" name="q" type="search" autocomplete="off" placeholder="Search anything and everything..." aria-label="Search query" />
+              <button class="btn primary go" type="submit">Search!</button>
+            </form>
+
+            <div class="button-row">
+              <button class="btn" id="retroBtn" type="button">I&apos;m Feeling Retro</button>
+              <button class="btn fun" id="wheelBtn" type="button">Spin Web Wheel</button>
+              <button class="btn" id="clearBtn" type="button">Clear</button>
+              <button class="btn" id="homeBtn" type="button">Make Homepage</button>
+            </div>
+
+            <div class="search-options" role="radiogroup" aria-label="Search type">
+              <label><input type="radio" name="mode" value="web" checked /> Web</label>
+              <label><input type="radio" name="mode" value="images" /> Images</label>
+              <label><input type="radio" name="mode" value="news" /> News</label>
+              <label><input type="radio" name="mode" value="videos" /> Videos</label>
+              <label><input type="radio" name="mode" value="wiki" /> Wikipedia</label>
+              <label><input type="radio" name="mode" value="maps" /> Maps</label>
+            </div>
+
+            <div class="progress-wrap" id="progressWrap" aria-label="Loading progress"><div class="progress-bar" id="progressBar"></div></div>
+            <div class="status-box" id="status">Ready. Type a search above.</div>
+          </section>
+
+          <section class="results-window" id="resultsWindow" aria-label="XYMZ Results window">
+            <div class="window-title">
+              <span id="resultsTitle">XYMZ Results</span>
+              <span class="lights"><span></span><span></span><span></span></span>
+            </div>
+            <div class="results-tools" id="resultsTools">Enter a search to view retro results inside XYMZ.</div>
+            <div class="results-body" id="resultsBody"></div>
+          </section>
+
+          <nav class="links-strip" aria-label="Quick links">
+            <a href="#" data-fill="top news">Top News</a> ·
+            <a href="#" data-fill="sites by subject">Sites by Subject</a> ·
+            <a href="#" data-fill="city guide near me">City Guide</a> ·
+            <a href="#" data-fill="road maps">Road Maps</a> ·
+            <a href="#" data-fill="software downloads">Software</a> ·
+            <a href="#" data-fill="weather forecast">Weather</a> ·
+            <a href="#" data-fill="music">Music</a> ·
+            <a href="#" data-fill="chat rooms">Chat Now!</a>
+          </nav>
+
+          <div class="mini-search" aria-label="Most recent questions">
+            <div class="mini-head">Most Recent Questions About <strong>Everything</strong></div>
+            <div class="mini-body">
+              Where can I find the best site for <strong id="recentTopic">retro web design</strong>?<br />
+              What are people asking <a href="#" data-fill="trending searches right now">RIGHT NOW?</a> <span class="blink">→</span>
+            </div>
+          </div>
+
+          <section class="directory" aria-label="Directory categories">
+            <article class="card">
+              <h3>Arts &amp; Humanities</h3>
+              <p><a href="#" data-fill="literature art photography">Literature</a>, <a href="#" data-fill="photography tutorials">Photography</a>, <a href="#" data-fill="history resources">History</a>, <a href="#" data-fill="digital art">Digital Art</a></p>
+            </article>
+            <article class="card">
+              <h3>News &amp; Media</h3>
+              <p><a href="#" data-fill="breaking news">Full Coverage</a>, <a href="#" data-fill="newspapers">Newspapers</a>, <a href="#" data-fill="technology news">Technology</a>, <a href="#" data-fill="sports news">Sports</a></p>
+            </article>
+            <article class="card">
+              <h3>Business &amp; Economy</h3>
+              <p><a href="#" data-fill="companies finance jobs">Companies</a>, <a href="#" data-fill="finance markets">Finance</a>, <a href="#" data-fill="jobs hiring">Jobs</a>, <a href="#" data-fill="small business tips">Small Biz</a></p>
+            </article>
+            <article class="card">
+              <h3>Computers &amp; Internet</h3>
+              <p><a href="#" data-fill="web development tutorials">Internet</a>, <a href="#" data-fill="www search engines">WWW</a>, <a href="#" data-fill="software downloads">Software</a>, <a href="#" data-fill="computer games">Games</a></p>
+            </article>
+          </section>
+
+          <section class="tool-grid" aria-label="Interactive XYMZ tools">
+            <article class="tool-card">
+              <h3>XYMZ AnswerBot</h3>
+              <input id="botQuestion" type="text" placeholder="Ask AnswerBot anything..." />
+              <div class="button-row"><button class="btn tiny fun" id="askBotBtn" type="button">Ask Bot</button><button class="btn tiny" id="askBotFromSearchBtn" type="button">Use Search Text</button></div>
+              <div class="tool-output" id="botOutput">🤖 AnswerBot is online and waiting.</div>
+            </article>
+
+            <article class="tool-card">
+              <h3>Add Your Site</h3>
+              <input id="siteTitle" type="text" placeholder="Site title" />
+              <input id="siteUrl" type="url" placeholder="https://example.com" />
+              <select id="siteCategory">
+                <option>Personal Pages</option><option>Business</option><option>Entertainment</option><option>Computers</option><option>Education</option><option>Shopping</option>
+              </select>
+              <button class="btn tiny primary" id="addSiteBtn" type="button">Submit to XYMZ</button>
+              <ul id="siteList" class="site-list"></ul>
+            </article>
+
+            <article class="tool-card">
+              <h3>Guestbook</h3>
+              <input id="guestName" type="text" placeholder="Your screen name" />
+              <textarea id="guestMessage" placeholder="Leave a retro guestbook message..."></textarea>
+              <button class="btn tiny primary" id="signGuestBtn" type="button">Sign Guestbook</button>
+              <div class="tool-output" id="guestbookOutput">No guestbook entries yet. Be the first!</div>
+            </article>
+
+            <article class="tool-card">
+              <h3>Web Wheel</h3>
+              <div class="tool-output" id="wheelOutput">Click <strong>Spin Web Wheel</strong> to discover a random internet quest.</div>
+              <ul>
+                <li>Finds quirky topics.</li>
+                <li>Runs in your selected search mode.</li>
+                <li>Beep-boops like a classic portal.</li>
+              </ul>
+            </article>
+          </section>
+
+          <div class="web-ring">
+            &lt;&lt; <a href="#" data-fill="previous retro web ring site">Previous</a> | <strong>XYMZ Retro Web Ring</strong> | <a href="#" data-fill="next retro web ring site">Next</a> &gt;&gt;
+          </div>
+
+        </div>
+
+        <div id="about" class="view info-page" aria-labelledby="about-title">
+          <div class="info-head">
+            <img class="info-logo" src="assets/XYMZSearch-cropped.png" alt="XYMZ logo" />
+            <div>
+              <h1 id="about-title">About XYMZ</h1>
+              <p class="subtitle">Search Engine &amp; Web Services for the whole wide web.</p>
+            </div>
+          </div>
+          <div class="notice-box">Welcome to XYMZ, a retro-inspired search portal built to help people search anything and everything from one simple page.</div>
+          <div class="info-grid">
+            <article class="info-card full"><h2>Company Background</h2><p>XYMZ is a classic early-2000s style web company with a modern mission: make online discovery fast, friendly, and fun. It blends the familiar search box of early web engines with the directory, news, tools, and community features of vintage internet portals.</p><p>The company is presented as a Search Engine &amp; Web Services brand offering web search, category browsing, custom portals, site listings, promotional placements, and discovery tools for individuals, schools, clubs, and small businesses.</p></article>
+            <article class="info-card"><h2>What XYMZ Does</h2><ul><li>Searches Web, Images, News, Videos, Wikipedia, and Maps.</li><li>Shows results inside a retro XYMZ Results window.</li><li>Supports saved searches, recent searches, and site submissions.</li><li>Includes fun portal tools like AnswerBot, Web Buddy, and Guestbook.</li></ul></article>
+            <article class="info-card"><h2>Our Mission</h2><p>XYMZ helps users jump from curiosity to answers. The goal is to keep searching simple enough for anyone while making the internet feel exciting, colorful, and explorable again.</p></article>
+            <article class="info-card"><h2>Search Philosophy</h2><p>XYMZ combines old-school web-directory organization with live search shortcuts. It does not hide the web behind a plain screen; it gives users panels, tools, categories, saved links, and direct routes to information.</p></article>
+            <article class="info-card"><h2>Web Services</h2><p>XYMZ represents services like business directory listings, school and club portals, sponsored links, affiliate campaigns, local pages, and search-powered landing pages.</p></article>
+          </div>
+        </div>
+
+        <div id="help" class="view info-page" aria-labelledby="help-title">
+          <div class="info-head">
+            <img class="info-logo" src="assets/XYMZSearch-cropped.png" alt="XYMZ logo" />
+            <div><h1 id="help-title">XYMZ Help Center</h1><p class="subtitle">Tips, tricks, and support for better searching.</p></div>
+          </div>
+          <div class="info-grid">
+            <article class="info-card full"><h2>How to Search</h2><ol><li>Type a question, keyword, place, person, product, or idea into the search bar.</li><li>Choose Web, Images, News, Videos, Wikipedia, or Maps.</li><li>Click <strong>Search!</strong> and XYMZ will build an in-page results window with helpful destinations.</li></ol></article>
+            <article class="info-card"><h2>Search Tips</h2><ul><li>Use specific words, such as “best soccer highlights.”</li><li>Use quotes for exact phrases.</li><li>Try fewer words if results feel too narrow.</li><li>Use directory links when you want ideas.</li></ul></article>
+            <article class="info-card"><h2>Search Modes</h2><p><strong>Web</strong> gives general search links. <strong>Images</strong> finds picture-search pages. <strong>News</strong> finds current coverage. <strong>Videos</strong> finds video platforms. <strong>Wikipedia</strong> can show encyclopedia summaries. <strong>Maps</strong> opens map search options.</p></article>
+            <article class="info-card"><h2>Fun Tools</h2><p>Use AnswerBot for quick project-friendly answers, Spin Web Wheel for random discovery, Save Current Search to bookmark terms, and Guestbook to leave messages stored in your browser.</p></article>
+            <article class="info-card"><h2>Browser Storage</h2><p>Recent searches, saved searches, guestbook entries, visitor count, theme, and submitted sites are stored locally in your browser using localStorage. They stay on your computer and can be cleared from your browser settings.</p></article>
+          </div>
+        </div>
+
+        <div id="corporate" class="view info-page" aria-labelledby="corporate-title">
+          <div class="info-head">
+            <img class="info-logo" src="assets/XYMZSearch-cropped.png" alt="XYMZ logo" />
+            <div><h1 id="corporate-title">Corporate Services</h1><p class="subtitle">Search, discovery, advertising, and web presence tools.</p></div>
+          </div>
+          <div class="notice-box">XYMZ Corporate Services supports businesses that want to be discovered online through search, directories, ads, and custom web services.</div>
+          <div class="info-grid">
+            <article class="info-card"><h2>Search Advertising</h2><p>Promote a business, product, event, or service with sponsored placements designed to match the retro portal style while keeping the experience clear.</p></article>
+            <article class="info-card"><h2>Site Submission</h2><p>Businesses can be listed in directory categories such as Shopping, Travel, Business, Computers, Health, Entertainment, Education, and Local Guides.</p></article>
+            <article class="info-card"><h2>Affiliate Program</h2><p>Partner websites can connect visitors to XYMZ search tools, category links, and discovery pages while sharing the nostalgic brand experience.</p></article>
+            <article class="info-card"><h2>Custom Web Portals</h2><p>XYMZ can represent custom landing pages, mini search portals, school resource hubs, club directories, and small-business web service homepages.</p></article>
+            <article class="info-card full"><h2>Why Businesses Use XYMZ</h2><p>XYMZ is built around quick discovery. The homepage combines search, categories, recent topics, news-style links, community tools, and web services in one place, making it useful for visitors who want answers fast.</p><div class="button-row"><button class="btn primary" type="button" data-page="help">Questions &amp; Comments</button><button class="btn" type="button" data-page="home">Return to Search</button></div></article>
+          </div>
+        </div>
+      </section>
+
+      <aside class="rightbar" aria-label="Extras">
+        <section class="panel today">
+          <h2>Today on XYMZ</h2>
+          <ul>
+            <li><a href="#" data-fill="dog park stories">Woof! Dog Park Stories</a></li>
+            <li><a href="#" data-fill="free internet access">Free Internet Access</a></li>
+            <li><a href="#" data-fill="top video games">Top 25 Video Games</a></li>
+            <li><a href="#" data-fill="internet culture 2000s">Net Culture</a></li>
+          </ul>
+        </section>
+
+        <section class="panel">
+          <h2>Recent Searches</h2>
+          <ul id="recentSearches" class="recent-list"><li>No searches yet.</li></ul>
+        </section>
+
+        <section class="panel">
+          <h2>Search Tools</h2>
+          <ul>
+            <li><a href="#" data-mode="web" data-fill="advanced search tips">Advanced Search</a></li>
+            <li><a href="#" data-mode="news" data-fill="top news">News Center</a></li>
+            <li><a href="#" data-mode="maps" data-fill="maps near me">Maps</a></li>
+            <li><a href="#" data-mode="images" data-fill="pictures and sounds">Pictures &amp; Sounds</a></li>
+          </ul>
+        </section>
+
+        <section class="panel today" aria-label="Docker container status">
+          <h2>Docker Status</h2>
+          <ul>
+            <li><span id="dockerStatus">Checking Docker API...</span></li>
+            <li><a href="/api/health" target="_blank" rel="noopener">Open API Health</a></li>
+          </ul>
+        </section>
+      </aside>
+    </main>
+
+    <footer class="footer">
+      <a href="#home" data-page="home">Make XYMZ Your Homepage</a> •
+      <a href="#corporate" data-page="corporate">Advertise on XYMZ</a> •
+      <a href="#corporate" data-page="corporate">Become an Affiliate</a> •
+      <a href="#corporate" data-page="corporate">Investor Relations</a> •
+      <a href="#help" data-page="help">Questions &amp; Comments</a><br />
+      Copyright © 2001-2026 XYMZ Search Engine &amp; Web Services. This retro front-end creates in-page results and links to live web sources.
+    </footer>
+  </div>
+
+  <aside class="web-buddy" id="webBuddy" aria-label="Web Buddy popup">
+    <div class="buddy-title"><span>XYMZ Web Buddy</span><button class="btn tiny" id="closeBuddy" type="button">X</button></div>
+    <div class="buddy-body"><span class="buddy-avatar">🧭</span><strong>Hi, web traveler!</strong><br />Try spinning the Web Wheel, switching themes, or asking AnswerBot. I live in your browser and I am extremely 2001.</div>
+  </aside>
+
+  <script>
+    const $ = (sel, root = document) => root.querySelector(sel);
+    const $$ = (sel, root = document) => Array.from(root.querySelectorAll(sel));
+
+    const form = $('#searchForm');
+    const input = $('#q');
+    const statusBox = $('#status');
+    const recentList = $('#recentSearches');
+    const savedList = $('#savedSearches');
+    const recentTopic = $('#recentTopic');
+    const clearBtn = $('#clearBtn');
+    const retroBtn = $('#retroBtn');
+    const wheelBtn = $('#wheelBtn');
+    const homeBtn = $('#homeBtn');
+    const views = $$('.view');
+    const pageLinks = $$('[data-page]');
+    const resultsWindow = $('#resultsWindow');
+    const resultsTitle = $('#resultsTitle');
+    const resultsTools = $('#resultsTools');
+    const resultsBody = $('#resultsBody');
+    const progressWrap = $('#progressWrap');
+    const progressBar = $('#progressBar');
+    const soundBtn = $('#soundBtn');
+    const themeSelect = $('#themeSelect');
+    const saveSearchBtn = $('#saveSearchBtn');
+    const botQuestion = $('#botQuestion');
+    const botOutput = $('#botOutput');
+    const siteList = $('#siteList');
+    const guestbookOutput = $('#guestbookOutput');
+    const webBuddy = $('#webBuddy');
+    const wheelOutput = $('#wheelOutput');
+
+    const sampleRetroSearches = [
+      'best flash games archive',
+      'how to build a website in html',
+      'web portals from 2001',
+      'free email providers',
+      'retro search engine design',
+      'personal homepage ideas',
+      'top music hits 2002',
+      'old school guestbook html'
+    ];
+
+    const wheelSearches = [
+      'weird websites from the early internet',
+      'history of search engines',
+      'best pixel art tutorials',
+      'internet archive classic games',
+      'how web rings worked',
+      '2000s website design inspiration',
+      'classic web portals',
+      'retro computer sound effects'
+    ];
+
+    let audioCtx = null;
+    let soundEnabled = localStorage.getItem('xymzSound') === 'on';
+    let sparkleCooldown = 0;
+
+    function storageGet(key, fallback) {
+      try { return JSON.parse(localStorage.getItem(key) || JSON.stringify(fallback)); }
+      catch { return fallback; }
+    }
+    function storageSet(key, value) { localStorage.setItem(key, JSON.stringify(value)); }
+
+    function getMode() {
+      const chosen = $('input[name="mode"]:checked');
+      return chosen ? chosen.value : 'web';
+    }
+    function setMode(mode) {
+      const radio = $(`input[name="mode"][value="${mode}"]`);
+      if (radio) radio.checked = true;
+    }
+    function enc(q) { return encodeURIComponent(q.trim()); }
+
+    function urls(query) {
+      const q = enc(query);
+      return {
+        google: `https://www.google.com/search?q=${q}`,
+        bing: `https://www.bing.com/search?q=${q}`,
+        duck: `https://duckduckgo.com/?q=${q}`,
+        yahoo: `https://search.yahoo.com/search?p=${q}`,
+        images: `https://www.google.com/search?tbm=isch&q=${q}`,
+        bingImages: `https://www.bing.com/images/search?q=${q}`,
+        news: `https://news.google.com/search?q=${q}`,
+        bingNews: `https://www.bing.com/news/search?q=${q}`,
+        videos: `https://www.youtube.com/results?search_query=${q}`,
+        googleVideos: `https://www.google.com/search?tbm=vid&q=${q}`,
+        wiki: `https://en.wikipedia.org/w/index.php?search=${q}`,
+        maps: `https://www.google.com/maps/search/${q}`,
+        osm: `https://www.openstreetmap.org/search?query=${q}`,
+        books: `https://books.google.com/books?q=${q}`
+      };
+    }
+
+    function resultCard(title, url, desc, extra = '') {
+      return `<article class="result-card"><h3><a href="${url}" target="_blank" rel="noopener">${title}</a></h3><div class="result-url">${url.replace(/^https?:\/\//, '')}</div><p class="result-desc">${desc}</p><div class="result-actions"><a href="${url}" target="_blank" rel="noopener">Open result</a>${extra}</div></article>`;
+    }
+
+    function buildResults(query, mode) {
+      const u = urls(query);
+      const nice = escapeHtml(query);
+      const common = {
+        web: [
+          resultCard(`${nice} - Web results`, u.google, 'General web search results collected through a live search engine link.'),
+          resultCard(`${nice} on Bing`, u.bing, 'A second web index for comparing results and finding alternate sources.'),
+          resultCard(`${nice} on DuckDuckGo`, u.duck, 'Privacy-friendly results for your query, opened in a new tab.'),
+          resultCard(`${nice} in Yahoo Search`, u.yahoo, 'Classic portal-style search results from Yahoo.'),
+          resultCard(`${nice} encyclopedia lookup`, u.wiki, 'Research background and encyclopedia pages related to your search.'),
+          resultCard(`${nice} videos`, u.videos, 'Watch videos related to your topic.'),
+          resultCard(`${nice} map search`, u.maps, 'Find places, routes, and locations connected to your query.')
+        ],
+        images: [
+          resultCard(`${nice} - Google Images`, u.images, 'Image search results with photos, illustrations, and visual references.'),
+          resultCard(`${nice} - Bing Images`, u.bingImages, 'Alternate image search results and visual discovery.'),
+          resultCard(`${nice} web pages with images`, u.google, 'Regular web pages that may contain image galleries and references.'),
+          resultCard(`${nice} on Wikipedia Commons`, `https://commons.wikimedia.org/w/index.php?search=${enc(query)}`, 'Free media and educational image results, when available.')
+        ],
+        news: [
+          resultCard(`${nice} - Google News`, u.news, 'News results and current coverage for your search.'),
+          resultCard(`${nice} - Bing News`, u.bingNews, 'Another news search index for comparing headlines.'),
+          resultCard(`${nice} - Web coverage`, u.google, 'General web coverage, articles, explainers, and commentary.'),
+          resultCard(`${nice} - Video reports`, u.videos, 'Video news, explainers, and clips related to your query.')
+        ],
+        videos: [
+          resultCard(`${nice} - YouTube`, u.videos, 'Video search results from YouTube.'),
+          resultCard(`${nice} - Google Videos`, u.googleVideos, 'Videos from multiple indexed video sources.'),
+          resultCard(`${nice} - Web pages`, u.google, 'Pages and blogs that may embed or discuss videos.'),
+          resultCard(`${nice} - News videos`, u.news, 'News coverage that may include video segments.')
+        ],
+        wiki: [
+          resultCard(`${nice} - Wikipedia Search`, u.wiki, 'Encyclopedia search results for background information.'),
+          resultCard(`${nice} - Web verification`, u.google, 'Cross-check the topic across the wider web.'),
+          resultCard(`${nice} - Books`, u.books, 'Book results and reference materials related to your query.')
+        ],
+        maps: [
+          resultCard(`${nice} - Google Maps`, u.maps, 'Map results for places, businesses, routes, landmarks, or addresses.'),
+          resultCard(`${nice} - OpenStreetMap`, u.osm, 'Community map search results.'),
+          resultCard(`${nice} - Web places`, u.google, 'Web results for addresses, locations, and local guides.'),
+          resultCard(`${nice} - Images`, u.images, 'Images and photos connected to this place or map topic.')
+        ]
+      };
+      return common[mode] || common.web;
+    }
+
+    function escapeHtml(str) {
+      return str.replace(/[&<>'"]/g, ch => ({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[ch]));
+    }
+
+    function showPage(pageName, updateHash = true) {
+      const safeName = ['home', 'about', 'help', 'corporate'].includes(pageName) ? pageName : 'home';
+      views.forEach(view => view.classList.toggle('active', view.id === safeName));
+      pageLinks.forEach(link => link.classList.toggle('active', link.getAttribute('data-page') === safeName));
+      if (updateHash && window.location.hash !== `#${safeName}`) history.pushState(null, '', `#${safeName}`);
+      $('.page').scrollIntoView({ behavior: 'smooth', block: 'start' });
+      if (safeName === 'home' && input) setTimeout(() => input.focus(), 50);
+      fx('page');
+    }
+
+    function saveRecent(query) {
+      const cleaned = query.trim();
+      if (!cleaned) return;
+      const previous = storageGet('xymzRecent', []);
+      const next = [cleaned, ...previous.filter(item => item.toLowerCase() !== cleaned.toLowerCase())].slice(0, 8);
+      storageSet('xymzRecent', next);
+      renderRecent();
+    }
+
+    function renderRecent() {
+      const searches = storageGet('xymzRecent', []);
+      recentList.innerHTML = '';
+      if (!searches.length) { recentList.innerHTML = '<li>No searches yet.</li>'; return; }
+      searches.forEach(term => {
+        const li = document.createElement('li');
+        const a = document.createElement('a');
+        a.href = '#home'; a.textContent = term;
+        a.addEventListener('click', event => { event.preventDefault(); fillSearch(term, true); });
+        li.appendChild(a); recentList.appendChild(li);
+      });
+    }
+
+    function renderSaved() {
+      const searches = storageGet('xymzSaved', []);
+      savedList.innerHTML = '';
+      if (!searches.length) { savedList.innerHTML = '<li>No saved searches yet.</li>'; return; }
+      searches.forEach(term => {
+        const li = document.createElement('li');
+        const a = document.createElement('a');
+        a.href = '#home'; a.textContent = term;
+        a.addEventListener('click', event => { event.preventDefault(); fillSearch(term, true); });
+        li.appendChild(a); savedList.appendChild(li);
+      });
+    }
+
+    function saveCurrentSearch() {
+      const term = input.value.trim();
+      if (!term) { statusBox.textContent = 'Type a search first, then save it.'; fx('error'); return; }
+      const previous = storageGet('xymzSaved', []);
+      const next = [term, ...previous.filter(item => item.toLowerCase() !== term.toLowerCase())].slice(0, 10);
+      storageSet('xymzSaved', next);
+      renderSaved();
+      statusBox.textContent = `Saved "${term}" to your XYMZ saved searches.`;
+      fx('save');
+    }
+
+    function fillSearch(term, run = false) {
+      showPage('home');
+      input.value = term;
+      recentTopic.textContent = term;
+      statusBox.textContent = `Ready to search for "${term}".`;
+      input.focus();
+      fx('click');
+      if (run) setTimeout(() => form.requestSubmit(), 150);
+    }
+
+    async function runSearch(query, mode) {
+      showPage('home', false);
+      saveRecent(query);
+      recentTopic.textContent = query;
+      resultsWindow.classList.add('active');
+      resultsTitle.textContent = `XYMZ Results: ${query}`;
+      resultsTools.innerHTML = `Mode: <strong>${mode.toUpperCase()}</strong> • Searching the web directory, crawler cache, and portal links...`;
+      resultsBody.innerHTML = '<div class="notice-box">Loading results at lightning speed*...</div>';
+      progressWrap.classList.add('active');
+      progressBar.style.width = '0%';
+      fx('search');
+
+      const phases = ['Contacting XYMZ crawler...', 'Checking category directory...', 'Sorting best links...', 'Painting retro results window...'];
+      for (let i = 0; i <= 100; i += 10) {
+        await wait(85);
+        progressBar.style.width = i + '%';
+        statusBox.textContent = phases[Math.min(phases.length - 1, Math.floor(i / 30))];
+      }
+
+      const cards = buildResults(query, mode);
+      resultsTools.innerHTML = `Showing <strong>${cards.length}</strong> XYMZ portal results for <strong>${escapeHtml(query)}</strong> in <strong>${mode}</strong> mode. <button class="btn tiny" id="openPrimary">Open Full Results</button>`;
+      resultsBody.innerHTML = cards.join('');
+      $('#openPrimary').addEventListener('click', () => window.open(primaryUrl(query, mode), '_blank', 'noopener'));
+      statusBox.textContent = `Finished! Results are shown inside XYMZ. Choose any link to open live results.`;
+      progressWrap.classList.remove('active');
+      fx('done');
+
+      if (mode === 'wiki') addWikipediaSummary(query);
+      resultsWindow.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+
+    function primaryUrl(query, mode) {
+      const u = urls(query);
+      return mode === 'images' ? u.images : mode === 'news' ? u.news : mode === 'videos' ? u.videos : mode === 'wiki' ? u.wiki : mode === 'maps' ? u.maps : u.google;
+    }
+
+    async function addWikipediaSummary(query) {
+      try {
+        const api = `https://en.wikipedia.org/api/rest_v1/page/summary/${encodeURIComponent(query.replace(/ /g, '_'))}`;
+        const res = await fetch(api);
+        if (!res.ok) return;
+        const data = await res.json();
+        if (!data.extract) return;
+        const safeTitle = escapeHtml(data.title || query);
+        const safeText = escapeHtml(data.extract);
+        const url = data.content_urls && data.content_urls.desktop ? data.content_urls.desktop.page : urls(query).wiki;
+        resultsBody.insertAdjacentHTML('afterbegin', resultCard(`Wikipedia Quick Summary: ${safeTitle}`, url, safeText));
+      } catch (err) {
+        console.log('Wikipedia summary unavailable', err);
+      }
+    }
+
+    function wait(ms) { return new Promise(resolve => setTimeout(resolve, ms)); }
+
+    function enableAudio() {
+      if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      if (audioCtx.state === 'suspended') audioCtx.resume();
+    }
+
+    function tone(freq, duration = .08, type = 'square', gainVal = .035) {
+      if (!soundEnabled) return;
+      try {
+        enableAudio();
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.type = type;
+        osc.frequency.value = freq;
+        gain.gain.value = gainVal;
+        osc.connect(gain); gain.connect(audioCtx.destination);
+        osc.start();
+        gain.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + duration);
+        osc.stop(audioCtx.currentTime + duration);
+      } catch {}
+    }
+
+    function fx(kind) {
+      if (!soundEnabled) return;
+      const seq = {
+        click: [440], page: [330], error: [180, 150], search: [330, 440, 550], done: [660, 880], save: [523, 659], bot: [300, 500, 700], wheel: [260, 360, 520, 760]
+      }[kind] || [440];
+      seq.forEach((f, i) => setTimeout(() => tone(f, .09, i % 2 ? 'triangle' : 'square'), i * 80));
+    }
+
+    function updateSoundButton() {
+      soundBtn.textContent = `Sound FX: ${soundEnabled ? 'ON' : 'OFF'}`;
+    }
+
+    function applyTheme(theme) {
+      document.body.classList.remove('theme-ocean', 'theme-candy', 'theme-matrix');
+      if (theme !== 'classic') document.body.classList.add(`theme-${theme}`);
+      themeSelect.value = theme;
+      localStorage.setItem('xymzTheme', theme);
+    }
+
+    function answerBot(question) {
+      const q = question.toLowerCase();
+      if (!question.trim()) return '🤖 Please type a question first. I may be retro, but I still need words.';
+      if (q.includes('xymz')) return '🤖 XYMZ is a retro-styled Search Engine & Web Services company built around web search, directories, saved searches, AnswerBot, site submission, guestbook features, and corporate web services.';
+      if (q.includes('search')) return '🤖 Search tip: choose a mode, type specific keywords, then click Search. XYMZ will show a retro results window with links to live search sources.';
+      if (q.includes('company') || q.includes('business')) return '🤖 XYMZ Corporate Services focuses on search advertising, site submissions, affiliate partnerships, and custom web portals for businesses.';
+      if (q.includes('help')) return '🤖 Try using quotes for exact phrases, fewer keywords for broader results, and category links when you need ideas.';
+      if (q.includes('retro') || q.includes('2000')) return '🤖 Retro web style usually means bevels, gradients, tiny badges, side panels, guestbooks, web rings, bright links, marquee text, and lots of personality.';
+      return `🤖 I found a possible direction: search XYMZ for "${escapeHtml(question)}" and compare Web, News, Wikipedia, and Videos mode for the best answer.`;
+    }
+
+    function renderSites() {
+      const sites = storageGet('xymzSites', []);
+      siteList.innerHTML = '';
+      if (!sites.length) { siteList.innerHTML = '<li>Directory waiting for your first submission.</li>'; return; }
+      sites.slice(0, 5).forEach(site => {
+        const li = document.createElement('li');
+        li.innerHTML = `<a href="${site.url}" target="_blank" rel="noopener">${escapeHtml(site.title)}</a> <small>(${escapeHtml(site.category)})</small>`;
+        siteList.appendChild(li);
+      });
+    }
+
+    function addSite() {
+      const title = $('#siteTitle').value.trim();
+      let url = $('#siteUrl').value.trim();
+      const category = $('#siteCategory').value;
+      if (!title || !url) { statusBox.textContent = 'Add Your Site needs a title and URL.'; fx('error'); return; }
+      if (!/^https?:\/\//i.test(url)) url = 'https://' + url;
+      const sites = storageGet('xymzSites', []);
+      sites.unshift({ title, url, category, date: new Date().toLocaleDateString() });
+      storageSet('xymzSites', sites.slice(0, 20));
+      $('#siteTitle').value = ''; $('#siteUrl').value = '';
+      renderSites();
+      statusBox.textContent = `Submitted "${title}" to the XYMZ directory.`;
+      fx('save');
+    }
+
+    function renderGuestbook() {
+      const entries = storageGet('xymzGuestbook', []);
+      if (!entries.length) { guestbookOutput.textContent = 'No guestbook entries yet. Be the first!'; return; }
+      guestbookOutput.innerHTML = entries.slice(0, 4).map(e => `<p><strong>${escapeHtml(e.name)}</strong>: ${escapeHtml(e.message)}<br><small>${escapeHtml(e.date)}</small></p>`).join('');
+    }
+
+    function signGuestbook() {
+      const name = $('#guestName').value.trim() || 'Anonymous Surfer';
+      const message = $('#guestMessage').value.trim();
+      if (!message) { statusBox.textContent = 'Type a guestbook message first.'; fx('error'); return; }
+      const entries = storageGet('xymzGuestbook', []);
+      entries.unshift({ name, message, date: new Date().toLocaleString() });
+      storageSet('xymzGuestbook', entries.slice(0, 12));
+      $('#guestName').value = ''; $('#guestMessage').value = '';
+      renderGuestbook();
+      statusBox.textContent = 'Guestbook signed! Thanks for visiting XYMZ.';
+      fx('save');
+    }
+
+    function spinWheel() {
+      const term = wheelSearches[Math.floor(Math.random() * wheelSearches.length)];
+      input.value = term;
+      recentTopic.textContent = term;
+      wheelOutput.innerHTML = `🎡 The wheel picked: <strong>${escapeHtml(term)}</strong>`;
+      statusBox.textContent = 'Spinning the Web Wheel...';
+      fx('wheel');
+      setTimeout(() => form.requestSubmit(), 550);
+    }
+
+
+    async function checkDockerApi() {
+      const el = $('#dockerStatus');
+      if (!el) return;
+      try {
+        const res = await fetch('/api/health', { cache: 'no-store' });
+        if (!res.ok) throw new Error('API health check failed');
+        const data = await res.json();
+        el.innerHTML = `API online: <strong>${escapeHtml(data.service || 'XYMZ API')}</strong> • container <strong>${escapeHtml(data.container || 'unknown')}</strong>`;
+      } catch (err) {
+        el.textContent = location.protocol === 'file:'
+          ? 'Open with Docker to connect the API.'
+          : 'API offline. Run docker compose up --build.';
+      }
+    }
+
+    function sparkle(x, y) {
+      const star = document.createElement('span');
+      star.className = 'sparkle';
+      star.textContent = Math.random() > .5 ? '✦' : '✧';
+      star.style.left = x + 'px';
+      star.style.top = y + 'px';
+      document.body.appendChild(star);
+      setTimeout(() => star.remove(), 820);
+    }
+
+    form.addEventListener('submit', event => {
+      event.preventDefault();
+      const query = input.value.trim();
+      if (!query) { statusBox.textContent = 'Please type a search first.'; input.focus(); fx('error'); return; }
+      runSearch(query, getMode());
+    });
+
+    clearBtn.addEventListener('click', () => { input.value = ''; statusBox.textContent = 'Cleared. Type a new search.'; input.focus(); fx('click'); });
+    retroBtn.addEventListener('click', () => { const term = sampleRetroSearches[Math.floor(Math.random() * sampleRetroSearches.length)]; fillSearch(term); setTimeout(() => form.requestSubmit(), 250); });
+    wheelBtn.addEventListener('click', spinWheel);
+    homeBtn.addEventListener('click', () => { statusBox.textContent = 'Retro browser says: drag this page to your Home button!'; alert('To make XYMZ your homepage, bookmark this file or set it as your browser homepage. Totally retro!'); fx('click'); });
+    saveSearchBtn.addEventListener('click', saveCurrentSearch);
+
+    soundBtn.addEventListener('click', () => {
+      soundEnabled = !soundEnabled;
+      localStorage.setItem('xymzSound', soundEnabled ? 'on' : 'off');
+      updateSoundButton();
+      if (soundEnabled) { enableAudio(); fx('done'); }
+    });
+
+    themeSelect.addEventListener('change', () => { applyTheme(themeSelect.value); fx('page'); });
+    $('#buddyBtn').addEventListener('click', () => { webBuddy.classList.toggle('active'); fx('bot'); });
+    $('#closeBuddy').addEventListener('click', () => { webBuddy.classList.remove('active'); fx('click'); });
+
+    $('#askBotBtn').addEventListener('click', () => { botOutput.innerHTML = answerBot(botQuestion.value); fx('bot'); });
+    $('#askBotFromSearchBtn').addEventListener('click', () => { botQuestion.value = input.value; botOutput.innerHTML = answerBot(input.value); fx('bot'); });
+    $('#addSiteBtn').addEventListener('click', addSite);
+    $('#signGuestBtn').addEventListener('click', signGuestbook);
+
+    $$('[data-fill]').forEach(link => {
+      link.addEventListener('click', event => {
+        event.preventDefault();
+        const mode = link.getAttribute('data-mode');
+        if (mode) setMode(mode);
+        fillSearch(link.getAttribute('data-fill'));
+      });
+    });
+
+    pageLinks.forEach(link => {
+      link.addEventListener('click', event => { event.preventDefault(); showPage(link.getAttribute('data-page')); });
+    });
+
+    window.addEventListener('popstate', () => { showPage((window.location.hash || '#home').replace('#', ''), false); });
+
+    input.addEventListener('input', () => {
+      const value = input.value.trim();
+      statusBox.textContent = value ? `XYMZ is ready to search for "${value}".` : 'Ready. Type a search above.';
+      if (value) recentTopic.textContent = value;
+    });
+
+    document.addEventListener('mousemove', event => {
+      const now = Date.now();
+      if (now - sparkleCooldown > 75) { sparkle(event.clientX, event.clientY); sparkleCooldown = now; }
+    });
+
+    $$('button, a, input, select').forEach(el => el.addEventListener('mouseenter', () => fx('click')));
+
+    updateSoundButton();
+    applyTheme(localStorage.getItem('xymzTheme') || 'classic');
+    renderRecent();
+    renderSaved();
+    renderSites();
+    renderGuestbook();
+    checkDockerApi();
+    showPage((window.location.hash || '#home').replace('#', ''), false);
+  </script>
+</body>
+</html>

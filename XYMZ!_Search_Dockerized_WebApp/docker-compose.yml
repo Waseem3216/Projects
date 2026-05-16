@@ -1,0 +1,28 @@
+services:
+  frontend:
+    build:
+      context: ./frontend
+    ports:
+      - "8080:80"
+    depends_on:
+      api:
+        condition: service_healthy
+    restart: unless-stopped
+    networks:
+      - xymz-net
+
+  api:
+    build:
+      context: ./api
+    environment:
+      APP_NAME: "XYMZ Search Engine & Web Services API"
+      NODE_ENV: "production"
+    expose:
+      - "3000"
+    restart: unless-stopped
+    networks:
+      - xymz-net
+
+networks:
+  xymz-net:
+    driver: bridge

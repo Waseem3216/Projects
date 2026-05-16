@@ -1,0 +1,17 @@
+{
+  "name": "xymz-docker-api",
+  "version": "1.0.0",
+  "description": "Tiny Dockerized API service for the XYMZ Search Portal showcase project.",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "keywords": [
+    "docker",
+    "node",
+    "api",
+    "xymz",
+    "portfolio"
+  ],
+  "license": "MIT"
+}
